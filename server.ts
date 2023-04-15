@@ -23,11 +23,11 @@ app.use("/api", apiRouter);
 
 const { client } = require("./db");
 const PORT = 3000 || process.env;
-app.listen(PORT, async () => {
+const handle = app.listen(PORT, async () => {
     try {
         console.log(`server is running on http://localhost:${PORT}/`);
         await client.connect()
     } catch (error) {
-        client.close()
+        handle.close()
     }
 });

@@ -1,10 +1,15 @@
-import React from 'react';
-import { createRoot } from 'react-dom/client';
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const react_1 = __importDefault(require("react"));
+const client_1 = require("react-dom/client");
 const App = () => {
-    return React.createElement("div", null, "Hello World ");
+    return react_1.default.createElement("div", null, "Hello World ");
 };
 const container = document.getElementById('root');
-const root = container ? createRoot(container) : null;
+const root = container ? (0, client_1.createRoot)(container) : null;
 if (root) {
-    root.render(React.createElement(App, null));
+    root.render(react_1.default.createElement(App, null));
 }
