@@ -39,6 +39,7 @@ const handle = app.listen(PORT, () => __awaiter(void 0, void 0, void 0, function
         console.log("after connecting");
     }
     catch (error) {
+        console.log('error');
         handle.close();
     }
 }));

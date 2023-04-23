@@ -22,6 +22,7 @@ const apiRouter = require("./api");
 app.use("/api", apiRouter);
 
 const { client } = require("./db");
+
 const PORT = 3000 || process.env;
 const handle = app.listen(PORT, async () => {
     try {
@@ -30,6 +31,7 @@ const handle = app.listen(PORT, async () => {
         await client.connect()
         console.log("after connecting");
     } catch (error) {
+        console.log('error')
         handle.close()
     }
 });

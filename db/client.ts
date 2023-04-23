@@ -1,9 +1,14 @@
-const { Pool } = require("pg");
+import { Client } from "pg";
+import { config } from 'dotenv';
 
-const connectionString = "postgres://localhost:5432/purfectpics-dev";
+config()
 
-let client = new Pool({
-    connectionString
+const DB_URL = process.env.database_url
+
+let client = new Client({
+    connectionString: DB_URL
 })
 
-module.exports = client; 
+module.exports = {
+    client
+} 

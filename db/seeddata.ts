@@ -72,6 +72,7 @@ async function rebuildDB() {
     }
 }
 rebuildDB();
+
 module.exports = {
     rebuildDB,
     dropTables,

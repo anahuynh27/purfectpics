@@ -1,3 +1,6 @@
+export {}
 const client = require("./client");
 
-module.exports = client;
+module.exports = {
+  client
+}
