@@ -1,4 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const pg_1 = require("pg");
-module.exports = pg_1.Client;
+const { Pool } = require("pg");
+const connectionString = "postgres://localhost:5432/purfectpics-dev";
+let client = new Pool({
+    connectionString
+});
+module.exports = client;
