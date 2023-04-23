@@ -1,3 +1,9 @@
-import { Client } from "pg";
+const { Pool } = require("pg");
 
-module.exports = Client; 
+const connectionString = "postgres://localhost:5432/purfectpics-dev";
+
+let client = new Pool({
+    connectionString
+})
+
+module.exports = client; 

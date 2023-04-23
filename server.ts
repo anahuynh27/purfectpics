@@ -26,7 +26,9 @@ const PORT = 3000 || process.env;
 const handle = app.listen(PORT, async () => {
     try {
         console.log(`server is running on http://localhost:${PORT}/`);
+        console.log("before connecting");
         await client.connect()
+        console.log("after connecting");
     } catch (error) {
         handle.close()
     }
