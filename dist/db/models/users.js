@@ -10,14 +10,61 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const { client } = require('../client');
+;
+const bcrypt = require('bcrypt');
 // create user
-const createUser = (username, password, avatar) => __awaiter(void 0, void 0, void 0, function* () {
+const createUser = ({ username, password, avatar }) => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        const SALT_COUNT = 10;
+        const hashedPassword = yield bcrypt.hash(password, SALT_COUNT);
         const { rows: user } = yield client.query(`
     INSERT INTO users(username, password, avatar)
     VALUES ($1, $2, $3)
     RETURNING id, username, avatar
-    `, [username, password, avatar]);
+    `, [username, hashedPassword, avatar]);
+        return user;
+    }
+    catch (error) {
+        console.error(error);
+    }
+});
+const getUserByUsername = (username) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { rows: user } = yield client.query(`
+    SELECT username FROM users 
+    WHERE username = $1
+    `, [username]);
+        return user;
+    }
+    catch (error) {
+        console.error(error);
+    }
+});
+const getUser = ({ username, password }) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const user = yield getUserByUsername(username);
+        const hashedPassword = user.password;
+        // const { rows: user } = await client.query(`
+        // SELECT * FROM users
+        // RETURNING username, password
+        // `)
+        // can i do this way?
+        //SELECT username FROM users
+        const isValid = yield bcrypt.compare(password, hashedPassword);
+        if (isValid) {
+            return user;
+        }
+    }
+    catch (error) {
+        console.error(error);
+    }
+});
+const getUserById = ({ id }) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { rows: user } = yield client.query(`
+    SELECT id FROM users
+    WHERE id = $1
+    `, [id]);
         return user;
     }
     catch (error) {
@@ -25,5 +72,7 @@ const createUser = (username, password, avatar) => __awaiter(void 0, void 0, voi
     }
 });
 module.exports = {
-    createUser
+    createUser,
+    getUser,
+    getUserByUsername,
 };

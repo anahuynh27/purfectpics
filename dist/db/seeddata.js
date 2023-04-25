@@ -117,6 +117,7 @@ function rebuildDB() {
             yield dropTables();
             yield createTables();
             yield createInitialUsers();
+            client.end();
         }
         catch (error) {
             console.error("error during rebuildDB");

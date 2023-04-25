@@ -104,6 +104,7 @@ async function rebuildDB() {
         await dropTables();
         await createTables();
         await createInitialUsers();
+        client.end();  
     } catch (error) {
         console.error("error during rebuildDB");
     }
