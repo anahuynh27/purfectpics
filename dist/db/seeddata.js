@@ -10,17 +10,19 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const { client } = require('./client');
+const { createUser } = require('./models/users');
 function dropTables() {
     return __awaiter(this, void 0, void 0, function* () {
-        console.log("Dropping All Tables...");
         try {
+            console.log("Dropping All Tables...");
             yield client.query(`
-        DROP TABLE IF EXISTS users; 
-        DROP TABLE IF EXISTS posts;
-        DROP TABLE IF EXISTS tags;
-        DROP TABLE IF EXISTS comments;
         DROP TABLE IF EXISTS post_tags;
+        DROP TABLE IF EXISTS comments;
+        DROP TABLE IF EXISTS tags;
+        DROP TABLE IF EXISTS posts;
+        DROP TABLE IF EXISTS users; 
         `);
+            console.log("Finish dropping tables...");
         }
         catch (error) {
             console.error("error dropping tables ....");
@@ -30,8 +32,8 @@ function dropTables() {
 ;
 function createTables() {
     return __awaiter(this, void 0, void 0, function* () {
-        console.log("starting to build tables...");
         try {
+            console.log("starting to build tables...");
             yield client.query(`
         CREATE TABLE users (
             id SERIAL PRIMARY KEY,
@@ -67,12 +69,45 @@ function createTables() {
             "usersid" INTEGER REFERENCES users(id)
         );
         `);
+            console.log("Finished creating tables...");
         }
         catch (error) {
             console.error("error creating tables...");
         }
     });
 }
+const createInitialUsers = () => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        console.log("Creating users...");
+        const usersToCreate = [
+            {
+                username: 'jinx',
+                password: 'bestbb',
+                avatar: 'no image'
+            },
+            {
+                username: 'voodoo',
+                password: 'bestboy',
+                avatar: 'no image'
+            },
+            {
+                username: 'lulu',
+                password: 'bestgirl',
+                avatar: 'no image'
+            },
+            {
+                username: 'lemon',
+                password: 'bestgg',
+                avatar: 'no image'
+            },
+        ];
+        yield Promise.all(usersToCreate.map(createUser));
+        console.log("Finished creating users...");
+    }
+    catch (error) {
+        console.error("Error creating users...");
+    }
+});
 function rebuildDB() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
@@ -81,6 +116,7 @@ function rebuildDB() {
             console.log("after client connect");
             yield dropTables();
             yield createTables();
+            yield createInitialUsers();
         }
         catch (error) {
             console.error("error during rebuildDB");
