@@ -1,11 +1,13 @@
 const { client } = require('../client');
+const bcrypt = require('bcrypt');
+
 interface User { 
   username: string, 
   password: string, 
   avatar: string,
   id: number
 };
-const bcrypt = require('bcrypt');
+
 // create user
 const createUser = async ({username, password, avatar}:User) => {
   try {
@@ -25,6 +27,7 @@ const createUser = async ({username, password, avatar}:User) => {
   }
 };
 
+// get user by username
 const getUserByUsername = async (username:string) => {
   try {
     const { rows: user } = await client.query(`
@@ -38,6 +41,7 @@ const getUserByUsername = async (username:string) => {
   }
 };
 
+// get single user *authentication
 const getUser = async ({username, password}:User) => {
   try {
     const user = await getUserByUsername(username);
@@ -60,7 +64,7 @@ const getUser = async ({username, password}:User) => {
   }
 }
 
-
+// get user by id
 const getUserById = async ({id}:User) => {
   try {
     const { rows: user } = await client.query(`
@@ -74,8 +78,15 @@ const getUserById = async ({id}:User) => {
   }
 }
 
+// get all users
+
+// edit user
+
+// delete/deactivate user
+
 module.exports = {
   createUser,
   getUser,
   getUserByUsername,
+  getUserById
 }
