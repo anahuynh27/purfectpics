@@ -11,6 +11,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const { client } = require('./client');
 const { createUser } = require('./models/users');
+const { createPost } = require('./models/posts');
 function dropTables() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
@@ -39,14 +40,15 @@ function createTables() {
             id SERIAL PRIMARY KEY,
             username VARCHAR(225) UNIQUE NOT NULL,
             password VARCHAR(225) NOT NULL,
-            avatar TEXT
+            avatar TEXT,
+            isActive BOOLEAN DEFAULT true
         );
 
         CREATE TABLE posts (
             id SERIAL PRIMARY KEY, 
             title VARCHAR(225),
             content VARCHAR(225),
-            activie BOOLEAN, 
+            isActive BOOLEAN DEFAULT true, 
             "usersId" INTEGER REFERENCES users(id),
             photo TEXT
         );
@@ -101,11 +103,43 @@ const createInitialUsers = () => __awaiter(void 0, void 0, void 0, function* () 
                 avatar: 'no image'
             },
         ];
-        yield Promise.all(usersToCreate.map(createUser));
+        const createdNewUsers = yield Promise.all(usersToCreate.map(createUser));
+        console.log(createdNewUsers);
         console.log("Finished creating users...");
     }
     catch (error) {
         console.error("Error creating users...");
+    }
+});
+const createInitalPosts = () => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        console.log("creating initial posts...");
+        const postsToCreate = [
+            {
+                title: 'my dog is the cutest everrrrr',
+                content: 'JUST LOOK AT THAT FACE',
+                usersId: 3,
+                photo: 'not available'
+            },
+            {
+                title: 'smelly farts',
+                content: 'my dog ate too much cheese. It stanky!',
+                usersId: 1,
+                photo: 'not available'
+            },
+            {
+                title: 'park time!',
+                content: 'beautiful sunset with my owner',
+                usersId: 2,
+                photo: 'not available'
+            }
+        ];
+        const createdNewPosts = yield Promise.all(postsToCreate.map(createPost));
+        console.log(createdNewPosts);
+        console.log('Finished creating posts...');
+    }
+    catch (error) {
+        console.error("Error creating posts");
     }
 });
 function rebuildDB() {
@@ -117,6 +151,7 @@ function rebuildDB() {
             yield dropTables();
             yield createTables();
             yield createInitialUsers();
+            yield createInitalPosts();
             client.end();
         }
         catch (error) {

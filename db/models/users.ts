@@ -79,10 +79,52 @@ const getUserById = async ({id}:User) => {
 }
 
 // get all users
+const getAllUsers = async () => {
+  try {
+    const { rows: user } = await client.query(`
+    SELECT username FROM users
+    `)
+
+    return user;
+  } catch (error) {
+    console.error(error);
+  }
+}
 
 // edit user
+const updateUser = async ({id}:User, ...fields:any) => {
+  try {
+    const setString = Object.keys(fields)
+      .map((key, index) => `"${key}"=$${index + 1}`)
+      .join(", ");
+    
+    const { rows: user } = await client.query(`
+    UPDATE users
+    SET ${setString}
+    WHERE id = ${id}
+    RETURNING *
+    `, Object.values(fields));
+
+    return user; 
+  } catch (error) {
+    console.error(error);
+  };
+}
 
 // delete/deactivate user
+const deleteUser = async ({id}:User) => {
+  try {
+    const { rows: user } = await client.query(`
+    UPDATE users
+    SET "isActive" = 'false'
+    WHERE id =${id}
+    `, [id]);
+
+    return user;
+  } catch (error) {
+    console.error(error);
+  }
+}
 
 module.exports = {
   createUser,

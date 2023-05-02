@@ -1,7 +1,6 @@
-import { promises } from "dns";
-
 const { client } = require('./client');
-const { createUser } = require('./models/users')
+const { createUser } = require('./models/users');
+const { createPost } = require('./models/posts')
 
 async function dropTables() {
     try {
@@ -28,14 +27,15 @@ async function createTables() {
             id SERIAL PRIMARY KEY,
             username VARCHAR(225) UNIQUE NOT NULL,
             password VARCHAR(225) NOT NULL,
-            avatar TEXT
+            avatar TEXT,
+            isActive BOOLEAN DEFAULT true
         );
 
         CREATE TABLE posts (
             id SERIAL PRIMARY KEY, 
             title VARCHAR(225),
             content VARCHAR(225),
-            activie BOOLEAN, 
+            isActive BOOLEAN DEFAULT true, 
             "usersId" INTEGER REFERENCES users(id),
             photo TEXT
         );
@@ -89,10 +89,42 @@ const createInitialUsers = async () => {
                 avatar: 'no image'
             },
         ]
-        await Promise.all(usersToCreate.map(createUser))
+        const createdNewUsers = await Promise.all(usersToCreate.map(createUser));
+        console.log(createdNewUsers);
         console.log("Finished creating users...")
     } catch (error) {
         console.error("Error creating users...")
+    }
+}
+
+const createInitalPosts = async () => {
+    try {
+        console.log("creating initial posts...");
+        const postsToCreate = [
+            {
+                title: 'my dog is the cutest everrrrr',
+                content: 'JUST LOOK AT THAT FACE',
+                usersId: 3,
+                photo: 'not available'
+            },
+            {
+                title: 'smelly farts',
+                content: 'my dog ate too much cheese. It stanky!',
+                usersId: 1,
+                photo: 'not available'
+            },
+            {
+                title: 'park time!',
+                content: 'beautiful sunset with my owner',
+                usersId: 2,
+                photo: 'not available'
+            }
+        ];
+        const createdNewPosts = await Promise.all(postsToCreate.map(createPost));
+        console.log(createdNewPosts);
+        console.log('Finished creating posts...');
+    } catch (error) {
+        console.error("Error creating posts");
     }
 }
 
@@ -104,6 +136,7 @@ async function rebuildDB() {
         await dropTables();
         await createTables();
         await createInitialUsers();
+        await createInitalPosts();
         client.end();  
     } catch (error) {
         console.error("error during rebuildDB");

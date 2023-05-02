@@ -10,8 +10,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const { client } = require('../client');
-;
 const bcrypt = require('bcrypt');
+;
 // create user
 const createUser = ({ username, password, avatar }) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -28,6 +28,7 @@ const createUser = ({ username, password, avatar }) => __awaiter(void 0, void 0,
         console.error(error);
     }
 });
+// get user by username
 const getUserByUsername = (username) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { rows: user } = yield client.query(`
@@ -40,6 +41,7 @@ const getUserByUsername = (username) => __awaiter(void 0, void 0, void 0, functi
         console.error(error);
     }
 });
+// get single user *authentication
 const getUser = ({ username, password }) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const user = yield getUserByUsername(username);
@@ -59,6 +61,7 @@ const getUser = ({ username, password }) => __awaiter(void 0, void 0, void 0, fu
         console.error(error);
     }
 });
+// get user by id
 const getUserById = ({ id }) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { rows: user } = yield client.query(`
@@ -71,8 +74,54 @@ const getUserById = ({ id }) => __awaiter(void 0, void 0, void 0, function* () {
         console.error(error);
     }
 });
+// get all users
+const getAllUsers = () => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { rows: user } = yield client.query(`
+    SELECT username FROM users
+    `);
+        return user;
+    }
+    catch (error) {
+        console.error(error);
+    }
+});
+// edit user
+const updateUser = ({ id }, ...fields) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const setString = Object.keys(fields)
+            .map((key, index) => `"${key}"=$${index + 1}`)
+            .join(", ");
+        const { rows: user } = yield client.query(`
+    UPDATE users
+    SET ${setString}
+    WHERE id = ${id}
+    RETURNING *
+    `, Object.values(fields));
+        return user;
+    }
+    catch (error) {
+        console.error(error);
+    }
+    ;
+});
+// delete/deactivate user
+const deleteUser = ({ id }) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { rows: user } = yield client.query(`
+    UPDATE users
+    SET "isActive" = 'false'
+    WHERE id =${id}
+    `, [id]);
+        return user;
+    }
+    catch (error) {
+        console.error(error);
+    }
+});
 module.exports = {
     createUser,
     getUser,
     getUserByUsername,
+    getUserById
 };
