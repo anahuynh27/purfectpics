@@ -21,6 +21,31 @@ const createPost = async ({title, content, usersId, isActive, photo}:Posts) => {
     }
 };
 
+//get all active posts
+const getAllActivePosts = async () => {
+try {
+    const { rows: posts } = await client.query(`
+    SELECT id
+    FROM posts
+    WHERE "isActive" = 'true';
+    `);
+
+    console.log(posts);
+    return posts;
+} catch (error) {
+    console.error(error);
+}
+};
+
+//updatePost
+
+//getPostById
+
+//get posts by user
+
+//get post by tag name
+
 module.exports = {
-    createPost
+    createPost,
+    getAllActivePosts,
 }

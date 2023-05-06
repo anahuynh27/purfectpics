@@ -23,6 +23,26 @@ const createPost = ({ title, content, usersId, isActive, photo }) => __awaiter(v
         console.error(error);
     }
 });
+//get all active posts
+const getAllActivePosts = () => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { rows: posts } = yield client.query(`
+    SELECT id
+    FROM posts
+    WHERE "isActive" = 'true';
+    `);
+        console.log(posts);
+        return posts;
+    }
+    catch (error) {
+        console.error(error);
+    }
+});
+//updatePost
+//getPostById
+//get posts by user
+//get post by tag name
 module.exports = {
-    createPost
+    createPost,
+    getAllActivePosts,
 };

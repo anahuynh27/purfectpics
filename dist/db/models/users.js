@@ -123,5 +123,8 @@ module.exports = {
     createUser,
     getUser,
     getUserByUsername,
-    getUserById
+    getUserById,
+    getAllUsers,
+    updateUser,
+    deleteUser
 };
