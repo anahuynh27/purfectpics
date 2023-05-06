@@ -1,6 +1,7 @@
 const { client } = require('../client');
 
 interface Posts {
+    id: number,
     title: string, 
     content: string, 
     usersId: number, 
@@ -38,6 +39,24 @@ try {
 };
 
 //updatePost
+const updatePost = async ({id}:Posts, ...fields: []) => {
+    try {
+        const setString = Object.keys(fields)
+        .map((key, index) => `"${key}=$${index + 1}`)
+        .join(", ")
+
+        const { rows: [posts] } = await client.query(`
+        UPDATE posts
+        SET ${setString}
+        WHERE id=${id}
+        RETURNING *
+        `, Object.values(fields))
+
+        return posts
+    } catch (error) {
+        console.error(error)
+    }
+}
 
 //getPostById
 
@@ -47,5 +66,6 @@ try {
 
 module.exports = {
     createPost,
+    updatePost,
     getAllActivePosts,
 }
