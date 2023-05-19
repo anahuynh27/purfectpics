@@ -57,7 +57,22 @@ const updatePost = ({ id }, ...fields) => __awaiter(void 0, void 0, void 0, func
     }
 });
 //getPostById
+const getPostById = ({ id }) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { rows: [post] } = yield client.query(`
+        SELECT *
+        FROM posts
+        WHERE id = $1
+        `, [id]);
+        return post;
+    }
+    catch (error) {
+        console.error(error);
+    }
+});
 //get posts by user
+const getPostByUser = () => __awaiter(void 0, void 0, void 0, function* () {
+});
 //get post by tag name
 module.exports = {
     createPost,
