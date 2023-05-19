@@ -44,7 +44,7 @@ const updatePost = async ({id}:Posts, ...fields: []) => {
         const setString = Object.keys(fields)
         .map((key, index) => `"${key}=$${index + 1}`)
         .join(", ")
-
+        
         const { rows: [posts] } = await client.query(`
         UPDATE posts
         SET ${setString}
@@ -59,8 +59,24 @@ const updatePost = async ({id}:Posts, ...fields: []) => {
 }
 
 //getPostById
+const getPostById = async ({id}:Posts) => {
+    try {
+        const { rows: [post] } = await client.query(`
+        SELECT *
+        FROM posts
+        WHERE id = $1
+        `, [id]);
+
+        return post;
+    } catch (error) {
+        console.error(error);
+    }
+}
 
 //get posts by user
+const getPostByUser = async () => {
+    
+}
 
 //get post by tag name
 

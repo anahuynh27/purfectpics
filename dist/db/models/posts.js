@@ -39,10 +39,43 @@ const getAllActivePosts = () => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 //updatePost
+const updatePost = ({ id }, ...fields) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const setString = Object.keys(fields)
+            .map((key, index) => `"${key}=$${index + 1}`)
+            .join(", ");
+        const { rows: [posts] } = yield client.query(`
+        UPDATE posts
+        SET ${setString}
+        WHERE id=${id}
+        RETURNING *
+        `, Object.values(fields));
+        return posts;
+    }
+    catch (error) {
+        console.error(error);
+    }
+});
 //getPostById
+const getPostById = ({ id }) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { rows: [post] } = yield client.query(`
+        SELECT *
+        FROM posts
+        WHERE id = $1
+        `, [id]);
+        return post;
+    }
+    catch (error) {
+        console.error(error);
+    }
+});
 //get posts by user
+const getPostByUser = () => __awaiter(void 0, void 0, void 0, function* () {
+});
 //get post by tag name
 module.exports = {
     createPost,
+    updatePost,
     getAllActivePosts,
 };
