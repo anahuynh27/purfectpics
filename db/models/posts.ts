@@ -1,6 +1,7 @@
 const { client } = require('../client');
 
 interface Posts {
+    id: number,
     title: string, 
     content: string, 
     usersId: number, 
