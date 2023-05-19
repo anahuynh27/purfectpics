@@ -1,7 +1,6 @@
 const { client } = require('../client');
 
 interface Posts {
-    id: number,
     title: string, 
     content: string, 
     usersId: number, 
@@ -44,7 +43,7 @@ const updatePost = async ({id}:Posts, ...fields: []) => {
         const setString = Object.keys(fields)
         .map((key, index) => `"${key}=$${index + 1}`)
         .join(", ")
-
+        
         const { rows: [posts] } = await client.query(`
         UPDATE posts
         SET ${setString}
