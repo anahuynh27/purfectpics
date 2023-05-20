@@ -10,9 +10,9 @@ apiRouter.get('/', (req, res, next) => {
         message: "Server is online"
     });
 });
-// routers
-const postsRouter = require('./posts');
-apiRouter.use('/posts', postsRouter);
+//routers
+// const postsRouter = require('./posts')
+// apiRouter.use('/posts', postsRouter)
 const usersRouter = require('./users');
 apiRouter.use('/users', usersRouter);
 module.exports = apiRouter;

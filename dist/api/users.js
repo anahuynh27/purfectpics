@@ -34,3 +34,4 @@ usersRouter.get('/users', (req, res, next) => __awaiter(void 0, void 0, void 0, 
 // createuser
 // updateuser
 // deactivateuser
+module.exports = usersRouter;

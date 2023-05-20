@@ -21,7 +21,7 @@ app.get("/", (req: Request, res: Response, next: NextFunction) => {
 const apiRouter = require("./api");
 app.use("/api", apiRouter);
 
-const { client } = require("./db");
+const { client } = require("./db/client");
 
 const PORT = 3000 || process.env;
 const handle = app.listen(PORT, async () => {

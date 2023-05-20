@@ -29,7 +29,7 @@ app.get("/", (req, res, next) => {
 });
 const apiRouter = require("./api");
 app.use("/api", apiRouter);
-const { client } = require("./db");
+const { client } = require("./db/client");
 const PORT = 3000 || process.env;
 const handle = app.listen(PORT, () => __awaiter(void 0, void 0, void 0, function* () {
     try {
