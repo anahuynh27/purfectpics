@@ -12,34 +12,26 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const dotenv_1 = require("dotenv");
 const express_1 = __importDefault(require("express"));
-const cors_1 = __importDefault(require("cors"));
-const morgan_1 = __importDefault(require("morgan"));
-//dotenv
-(0, dotenv_1.config)();
-//setting up server
-const app = (0, express_1.default)();
-//middleware
-app.use(express_1.default.json());
-app.use((0, cors_1.default)());
-app.use((0, morgan_1.default)("dev"));
-app.get("/", (req, res, next) => {
-    res.send("Server Online");
-});
-const apiRouter = require("./api");
-app.use("/api", apiRouter);
-const { client } = require("./db/client");
-const PORT = 3000 || process.env;
-const handle = app.listen(PORT, () => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        console.log(`server is running on http://localhost:${PORT}/`);
-        console.log("before connecting");
-        yield client.connect();
-        console.log("after connecting");
-    }
-    catch (error) {
-        console.log('error');
-        handle.close();
-    }
+const usersRouter = express_1.default.Router();
+const { getUser, getAllUsers } = require('../db/models/users');
+// getuser
+usersRouter.get('/user', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const user = yield getUser;
+    res.send({
+        user
+    });
 }));
+// getalluser
+usersRouter.get('/users', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const users = yield getAllUsers;
+    res.send({
+        users
+    });
+}));
+// getuserbyusername
+// getuserbyid
+// createuser
+// updateuser
+// deactivateuser
+module.exports = usersRouter;

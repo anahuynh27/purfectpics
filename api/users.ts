@@ -30,3 +30,5 @@ usersRouter.get('/users', async (req: Request, res: Response, next: NextFunction
 // updateuser
 
 // deactivateuser
+
+module.exports = usersRouter

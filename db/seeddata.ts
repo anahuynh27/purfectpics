@@ -147,5 +147,4 @@ rebuildDB();
 module.exports = {
     rebuildDB,
     dropTables,
-
 }
