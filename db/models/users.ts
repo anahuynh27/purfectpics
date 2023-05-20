@@ -48,14 +48,6 @@ const getUser = async ({username, password}:User) => {
     const hashedPassword = user.password;
     const isValid = await bcrypt.compare(password, hashedPassword)
 
-    // const { rows: user } = await client.query(`
-    // SELECT * FROM users
-    // RETURNING username, password
-    // `)
-    // can i do this way?
-    //SELECT username FROM users
-
-
     if (isValid) {
       return user
     } 
