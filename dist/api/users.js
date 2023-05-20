@@ -14,7 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const usersRouter = express_1.default.Router();
-const { getUser, getAllUsers } = require('../db/models/users');
+const { getUser, getAllUsers, getUserById, createUser, updateUser, deleteUser } = require('../db/models/users');
 // getuser
 usersRouter.get('/user', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const user = yield getUser;
@@ -30,8 +30,31 @@ usersRouter.get('/users', (req, res, next) => __awaiter(void 0, void 0, void 0, 
     });
 }));
 // getuserbyusername
-// getuserbyid
+usersRouter.get('/user/:username', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const user = yield getUserById;
+    res.send({
+        user
+    });
+}));
 // createuser
+usersRouter.post('/register', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const register = yield createUser;
+    res.send({
+        message: 'user created!'
+    });
+}));
 // updateuser
+usersRouter.patch('/edituser', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const editUser = yield updateUser;
+    res.send({
+        message: 'user information updated'
+    });
+}));
 // deactivateuser
+usersRouter.patch('/deleteuser', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const editUser = yield deleteUser;
+    res.send({
+        message: 'user deactivated'
+    });
+}));
 module.exports = usersRouter;
