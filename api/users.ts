@@ -10,9 +10,11 @@ const {
   deleteUser
 } = require('../db/models/users')
 
-// getuser
-usersRouter.get('/me', async (req: Request, res: Response, next: NextFunction) => {
-  const user = await getUser()
+// getuser / login
+usersRouter.post('/login', async (req: Request, res: Response, next: NextFunction) => {
+  const { username, password } = req.body
+  console.log(username, password)
+  const user = await getUser({username, password})
   res.send({
     user
   })
@@ -20,7 +22,7 @@ usersRouter.get('/me', async (req: Request, res: Response, next: NextFunction) =
 
 // getalluser
 usersRouter.get('/all', async (req: Request, res: Response, next: NextFunction) => {
-  const users = await getAllUsers
+  const users = await getAllUsers()
   res.send({
     users
   })
@@ -38,14 +40,6 @@ usersRouter.post('/register', async (req: Request, res: Response, next: NextFunc
   const register = await createUser();
   res.send({
     message: 'user created!'
-  })
-})
-
-//login into account
-usersRouter.get('/login', async (req: Request, res: Response, next: NextFunction) => {
-  const login = await getUser();
-  res.send({
-    message: 'user logged in'
   })
 })
 

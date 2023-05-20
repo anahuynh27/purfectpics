@@ -31,8 +31,8 @@ const createUser = ({ username, password, avatar }) => __awaiter(void 0, void 0,
 // get user by username
 const getUserByUsername = (username) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { rows: user } = yield client.query(`
-    SELECT username FROM users 
+        const { rows: [user] } = yield client.query(`
+    SELECT username, password FROM users 
     WHERE username = $1
     `, [username]);
         return user;
@@ -46,13 +46,13 @@ const getUser = ({ username, password }) => __awaiter(void 0, void 0, void 0, fu
     try {
         const user = yield getUserByUsername(username);
         const hashedPassword = user.password;
+        const isValid = yield bcrypt.compare(password, hashedPassword);
         // const { rows: user } = await client.query(`
         // SELECT * FROM users
         // RETURNING username, password
         // `)
         // can i do this way?
         //SELECT username FROM users
-        const isValid = yield bcrypt.compare(password, hashedPassword);
         if (isValid) {
             return user;
         }
@@ -77,6 +77,7 @@ const getUserById = ({ id }) => __awaiter(void 0, void 0, void 0, function* () {
 // get all users
 const getAllUsers = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        console.log('got in here get all users');
         const { rows: user } = yield client.query(`
     SELECT username FROM users
     `);

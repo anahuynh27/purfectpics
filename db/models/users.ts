@@ -30,8 +30,8 @@ const createUser = async ({username, password, avatar}:User) => {
 // get user by username
 const getUserByUsername = async (username:string) => {
   try {
-    const { rows: user } = await client.query(`
-    SELECT username FROM users 
+    const { rows: [user] } = await client.query(`
+    SELECT username, password FROM users 
     WHERE username = $1
     `, [username]);
 
@@ -46,6 +46,7 @@ const getUser = async ({username, password}:User) => {
   try {
     const user = await getUserByUsername(username);
     const hashedPassword = user.password;
+    const isValid = await bcrypt.compare(password, hashedPassword)
 
     // const { rows: user } = await client.query(`
     // SELECT * FROM users
@@ -54,7 +55,6 @@ const getUser = async ({username, password}:User) => {
     // can i do this way?
     //SELECT username FROM users
 
-    const isValid = await bcrypt.compare(password, hashedPassword)
 
     if (isValid) {
       return user
@@ -81,6 +81,7 @@ const getUserById = async ({id}:User) => {
 // get all users
 const getAllUsers = async () => {
   try {
+    console.log('got in here get all users')
     const { rows: user } = await client.query(`
     SELECT username FROM users
     `)
