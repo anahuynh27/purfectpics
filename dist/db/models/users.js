@@ -47,12 +47,6 @@ const getUser = ({ username, password }) => __awaiter(void 0, void 0, void 0, fu
         const user = yield getUserByUsername(username);
         const hashedPassword = user.password;
         const isValid = yield bcrypt.compare(password, hashedPassword);
-        // const { rows: user } = await client.query(`
-        // SELECT * FROM users
-        // RETURNING username, password
-        // `)
-        // can i do this way?
-        //SELECT username FROM users
         if (isValid) {
             return user;
         }
