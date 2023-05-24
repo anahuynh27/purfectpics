@@ -46,7 +46,6 @@ usersRouter.post('/register', (req, res, next) => __awaiter(void 0, void 0, void
         return res.status(400).json({ message: 'Password must be at least 8 characters long...' });
     }
     const register = yield createUser({ username, password, avatar });
-    console.log(username, password, avatar);
     res.send({
         message: `Registration successful! Welcome, ${username} 🐾`,
         register
@@ -68,9 +67,13 @@ usersRouter.patch('/deleteuser', (req, res, next) => __awaiter(void 0, void 0, v
 }));
 // getuserbyusername
 usersRouter.get('/:username', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const user = yield getUserById();
-    res.send({
-        user
-    });
+    const username = req.params.username;
+    const user = yield getUserByUsername(username);
+    if (!user) {
+        return res.status(400).json({ message: 'User does not exist' });
+    }
+    // delete password
+    delete user.password;
+    res.send(user);
 }));
 module.exports = usersRouter;

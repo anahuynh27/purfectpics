@@ -45,7 +45,7 @@ usersRouter.post('/register', async (req: Request, res: Response, next: NextFunc
   const { username, password, avatar }: User = req.body
 
   // check if username exists
-  const existingUser = await getUserByUsername(username);
+  const existingUser: boolean = await getUserByUsername(username);
   if (existingUser) {
     return res.status(400).json({ message: 'Username already taken'})  
   }
@@ -56,7 +56,6 @@ usersRouter.post('/register', async (req: Request, res: Response, next: NextFunc
   }
 
   const register: object = await createUser({username, password, avatar});
-  console.log(username, password, avatar)
 
   res.send({
     message: `Registration successful! Welcome, ${username} 🐾`,
@@ -82,10 +81,17 @@ usersRouter.patch('/deleteuser', async (req: Request, res: Response, next: NextF
 
 // getuserbyusername
 usersRouter.get('/:username', async (req: Request, res: Response, next: NextFunction) => {
-  const user = await getUserById()
-  res.send({
-    user
-  })
+  const  username = req.params.username
+  const user = await getUserByUsername(username)
+
+  if (!user) {
+    return res.status(400).json({ message: 'User does not exist'})
+  }
+
+  // delete password
+  delete user.password
+
+  res.send(user)
 })
 
 module.exports = usersRouter
