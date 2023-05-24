@@ -88,18 +88,27 @@ const getAllUsers = async () => {
 }
 
 // edit user
-const updateUser = async (userID: User, ...fields: any) => {
+const updateUser = async (userID: User, fields: User) => {
   try {
+    // updated password needs to be hashed
+    const SALT_COUNT = 10;
+    const password = fields.password;
+
+    const hashedPassword = await bcrypt.hash(password, SALT_COUNT);
+    fields.password = hashedPassword;
+
     const setString = Object.keys(fields)
       .map((key, index) => `"${key}"=$${index + 1}`)
       .join(", ");
-    
-    const { rows: user } = await client.query(`
+
+    const { rows: [user] } = await client.query(`
     UPDATE users
     SET ${setString}
     WHERE id = ${userID}
     RETURNING *
     `, Object.values(fields));
+
+    delete user.password;
 
     return user; 
   } catch (error) {

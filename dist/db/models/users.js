@@ -85,17 +85,23 @@ const getAllUsers = () => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 // edit user
-const updateUser = (userID, ...fields) => __awaiter(void 0, void 0, void 0, function* () {
+const updateUser = (userID, fields) => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        // updated password needs to be hashed
+        const SALT_COUNT = 10;
+        const password = fields.password;
+        const hashedPassword = yield bcrypt.hash(password, SALT_COUNT);
+        fields.password = hashedPassword;
         const setString = Object.keys(fields)
             .map((key, index) => `"${key}"=$${index + 1}`)
             .join(", ");
-        const { rows: user } = yield client.query(`
+        const { rows: [user] } = yield client.query(`
     UPDATE users
     SET ${setString}
     WHERE id = ${userID}
     RETURNING *
     `, Object.values(fields));
+        delete user.password;
         return user;
     }
     catch (error) {

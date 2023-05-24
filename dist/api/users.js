@@ -14,6 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const usersRouter = express_1.default.Router();
+;
 const { getUser, getAllUsers, getUserByUsername, getUserById, createUser, updateUser, deleteUser } = require('../db/models/users');
 // getalluser
 usersRouter.get('/all', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
@@ -28,12 +29,13 @@ usersRouter.post('/login', (req, res, next) => __awaiter(void 0, void 0, void 0,
     if (!user) {
         return res.status(401).json(({ message: 'Invalid username or password' }));
     }
+    ;
     res.send({
         message: `Welcome back, ${username}! 🐾`,
         user
     });
 }));
-// createuser --->register an account
+// createuser ---> register an account
 usersRouter.post('/register', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { username, password, avatar } = req.body;
     // check if username exists
@@ -41,10 +43,12 @@ usersRouter.post('/register', (req, res, next) => __awaiter(void 0, void 0, void
     if (existingUser) {
         return res.status(400).json({ message: 'Username already taken' });
     }
+    ;
     // validate password lenght
     if (password.length < 8) {
         return res.status(400).json({ message: 'Password must be at least 8 characters long...' });
     }
+    ;
     const register = yield createUser({ username, password, avatar });
     res.send({
         message: `Registration successful! Welcome, ${username} 🐾`,
@@ -52,10 +56,23 @@ usersRouter.post('/register', (req, res, next) => __awaiter(void 0, void 0, void
     });
 }));
 // updateuser
-usersRouter.patch('/edituser', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const editUser = yield updateUser();
+usersRouter.patch('/edit/:userID', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const { username, password, avatar } = req.body;
+    const userID = parseInt(req.params.userID);
+    // validate password lenght
+    if (password.length < 8) {
+        return res.status(400).json({ message: 'Password must be at least 8 characters long...' });
+    }
+    ;
+    const fields = {
+        username: username,
+        password: password,
+        avatar: avatar
+    };
+    const editUser = yield updateUser(userID, fields);
     res.send({
-        message: 'user information updated'
+        message: 'user information updated',
+        editUser
     });
 }));
 // deactivateuser
@@ -72,6 +89,7 @@ usersRouter.get('/:username', (req, res, next) => __awaiter(void 0, void 0, void
     if (!user) {
         return res.status(400).json({ message: 'User does not exist' });
     }
+    ;
     // delete password
     delete user.password;
     res.send(user);
@@ -83,6 +101,7 @@ usersRouter.get('/id/:userID', (req, res, next) => __awaiter(void 0, void 0, voi
     if (!user) {
         return res.status(400).json({ message: 'User does not exist' });
     }
+    ;
     res.send(user);
 }));
 module.exports = usersRouter;
