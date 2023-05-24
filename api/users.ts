@@ -29,6 +29,11 @@ usersRouter.post('/login', async (req: Request, res: Response, next: NextFunctio
   const { username, password }: User = req.body
   const user: object = await getUser({username, password});
 
+  // invalid username
+  if (!user) {
+    return res.status(401).json(({ message: 'Invalid username or password' }));
+  }
+
   res.send({
     message: `Welcome back, ${username}! 🐾`,
     user
@@ -41,7 +46,6 @@ usersRouter.post('/register', async (req: Request, res: Response, next: NextFunc
 
   // check if username exists
   const existingUser = await getUserByUsername(username);
-  console.log(existingUser)
   if (existingUser) {
     return res.status(400).json({ message: 'Username already taken'})  
   }
@@ -55,7 +59,7 @@ usersRouter.post('/register', async (req: Request, res: Response, next: NextFunc
   console.log(username, password, avatar)
 
   res.send({
-    message: `Registration successful! Welcome, ${username}`,
+    message: `Registration successful! Welcome, ${username} 🐾`,
     register
   })
 })

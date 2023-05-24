@@ -28,19 +28,6 @@ const createUser = ({ username, password, avatar }) => __awaiter(void 0, void 0,
         console.error(error);
     }
 });
-// get user by username
-const getUserByUsername = (username) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const { rows: [user] } = yield client.query(`
-    SELECT username FROM users 
-    WHERE username = $1
-    `, [username]);
-        return user;
-    }
-    catch (error) {
-        console.error(error);
-    }
-});
 // get single user *authentication
 const getUser = ({ username, password }) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -48,8 +35,25 @@ const getUser = ({ username, password }) => __awaiter(void 0, void 0, void 0, fu
         const hashedPassword = user.password;
         const isValid = yield bcrypt.compare(password, hashedPassword);
         if (isValid) {
+            delete user.password;
             return user;
         }
+        else {
+            throw new Error('Invalid username or password');
+        }
+    }
+    catch (error) {
+        console.error(error);
+    }
+});
+// get user by username
+const getUserByUsername = (username) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { rows: [user] } = yield client.query(`
+    SELECT username, password, avatar FROM users 
+    WHERE username = $1
+    `, [username]);
+        return user;
     }
     catch (error) {
         console.error(error);

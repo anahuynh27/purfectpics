@@ -4,13 +4,13 @@ const bcrypt = require('bcrypt');
 // interface
 interface User { 
   username: string, 
-  password: string, 
+  password?: string, 
   avatar: string,
   id: number
 };
 
 // create user
-const createUser = async ({username, password, avatar}:User) => {
+const createUser = async ({username, password, avatar}: User) => {
   try {
     const SALT_COUNT = 10;
     const hashedPassword = await bcrypt.hash(password, SALT_COUNT);
@@ -27,11 +27,30 @@ const createUser = async ({username, password, avatar}:User) => {
   }
 };
 
+
+// get single user *authentication
+const getUser = async ({username, password}: User) => {
+  try {
+    const user: User = await getUserByUsername(username);
+    const hashedPassword = user.password;
+    const isValid: boolean = await bcrypt.compare(password, hashedPassword);
+
+    if (isValid) {
+      delete user.password
+      return user
+    } else {
+      throw new Error('Invalid username or password')
+    }
+  } catch (error) {
+    console.error(error);
+  }
+}
+
 // get user by username
-const getUserByUsername = async (username:string) => {
+const getUserByUsername = async (username: string) => {
   try {
     const { rows: [user] } = await client.query(`
-    SELECT username FROM users 
+    SELECT username, password, avatar FROM users 
     WHERE username = $1
     `, [username]);
 
@@ -41,23 +60,8 @@ const getUserByUsername = async (username:string) => {
   }
 };
 
-// get single user *authentication
-const getUser = async ({username, password}:User) => {
-  try {
-    const user = await getUserByUsername(username);
-    const hashedPassword = user.password;
-    const isValid = await bcrypt.compare(password, hashedPassword)
-
-    if (isValid) {
-      return user
-    } 
-  } catch (error) {
-    console.error(error);
-  }
-}
-
 // get user by id
-const getUserById = async ({id}:User) => {
+const getUserById = async ({id}: User) => {
   try {
     const { rows: user } = await client.query(`
     SELECT id FROM users
@@ -84,7 +88,7 @@ const getAllUsers = async () => {
 }
 
 // edit user
-const updateUser = async ({id}:User, ...fields:any) => {
+const updateUser = async ({id}: User, ...fields: any) => {
   try {
     const setString = Object.keys(fields)
       .map((key, index) => `"${key}"=$${index + 1}`)
@@ -104,7 +108,7 @@ const updateUser = async ({id}:User, ...fields:any) => {
 }
 
 // delete/deactivate user
-const deleteUser = async ({id}:User) => {
+const deleteUser = async ({id}: User) => {
   try {
     const { rows: user } = await client.query(`
     UPDATE users

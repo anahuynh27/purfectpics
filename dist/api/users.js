@@ -24,6 +24,10 @@ usersRouter.get('/all', (req, res, next) => __awaiter(void 0, void 0, void 0, fu
 usersRouter.post('/login', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { username, password } = req.body;
     const user = yield getUser({ username, password });
+    // invalid username
+    if (!user) {
+        return res.status(401).json(({ message: 'Invalid username or password' }));
+    }
     res.send({
         message: `Welcome back, ${username}! 🐾`,
         user
@@ -34,7 +38,6 @@ usersRouter.post('/register', (req, res, next) => __awaiter(void 0, void 0, void
     const { username, password, avatar } = req.body;
     // check if username exists
     const existingUser = yield getUserByUsername(username);
-    console.log(existingUser);
     if (existingUser) {
         return res.status(400).json({ message: 'Username already taken' });
     }
@@ -45,7 +48,7 @@ usersRouter.post('/register', (req, res, next) => __awaiter(void 0, void 0, void
     const register = yield createUser({ username, password, avatar });
     console.log(username, password, avatar);
     res.send({
-        message: `Registration successful! Welcome, ${username}`,
+        message: `Registration successful! Welcome, ${username} 🐾`,
         register
     });
 }));
