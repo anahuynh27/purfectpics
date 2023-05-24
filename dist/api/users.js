@@ -76,4 +76,13 @@ usersRouter.get('/:username', (req, res, next) => __awaiter(void 0, void 0, void
     delete user.password;
     res.send(user);
 }));
+// getuserbyid
+usersRouter.get('/id/:userID', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const userID = parseInt(req.params.userID);
+    const user = yield getUserById(userID);
+    if (!user) {
+        return res.status(400).json({ message: 'User does not exist' });
+    }
+    res.send(user);
+}));
 module.exports = usersRouter;

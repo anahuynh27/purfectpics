@@ -50,7 +50,7 @@ const getUser = ({ username, password }) => __awaiter(void 0, void 0, void 0, fu
 const getUserByUsername = (username) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { rows: [user] } = yield client.query(`
-    SELECT username, password, avatar FROM users 
+    SELECT id, username, password, avatar FROM users 
     WHERE username = $1
     `, [username]);
         return user;
@@ -60,12 +60,12 @@ const getUserByUsername = (username) => __awaiter(void 0, void 0, void 0, functi
     }
 });
 // get user by id
-const getUserById = ({ id }) => __awaiter(void 0, void 0, void 0, function* () {
+const getUserById = (userID) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { rows: user } = yield client.query(`
-    SELECT id FROM users
+        const { rows: [user] } = yield client.query(`
+    SELECT id, username, avatar FROM users
     WHERE id = $1
-    `, [id]);
+    `, [userID]);
         return user;
     }
     catch (error) {
@@ -85,7 +85,7 @@ const getAllUsers = () => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 // edit user
-const updateUser = ({ id }, ...fields) => __awaiter(void 0, void 0, void 0, function* () {
+const updateUser = (userID, ...fields) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const setString = Object.keys(fields)
             .map((key, index) => `"${key}"=$${index + 1}`)
@@ -93,7 +93,7 @@ const updateUser = ({ id }, ...fields) => __awaiter(void 0, void 0, void 0, func
         const { rows: user } = yield client.query(`
     UPDATE users
     SET ${setString}
-    WHERE id = ${id}
+    WHERE id = ${userID}
     RETURNING *
     `, Object.values(fields));
         return user;
@@ -104,13 +104,13 @@ const updateUser = ({ id }, ...fields) => __awaiter(void 0, void 0, void 0, func
     ;
 });
 // delete/deactivate user
-const deleteUser = ({ id }) => __awaiter(void 0, void 0, void 0, function* () {
+const deleteUser = (userID) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { rows: user } = yield client.query(`
     UPDATE users
     SET "isActive" = 'false'
-    WHERE id =${id}
-    `, [id]);
+    WHERE id =${userID}
+    `, [userID]);
         return user;
     }
     catch (error) {

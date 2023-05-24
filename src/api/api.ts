@@ -1,5 +1,5 @@
 // local server
-export const APIURL = 'http://localhost:3000/api'
+export const APIURL = 'http://localhost:3000/api';
 
 // login user 
 export const fetchLogin = async (username: string, password: string) => {
@@ -13,8 +13,8 @@ export const fetchLogin = async (username: string, password: string) => {
       password: `${password}`
     }),
   });
-  const json = await res.json()
-  return json
+  const json: object = await res.json();
+  return json;
 }
 
 // register user
@@ -30,13 +30,27 @@ export const fetchRegister = async (username: string, password: string, avatar: 
       avatar: `${avatar}`,
     }),
   });
-  const json = await res.json()
-  return json
+  const json: object = await res.json();
+  return json;
 }
 
 // fetch all users
 export const fetchUsers = async () => {
-  const res = await fetch(`${APIURL}/users/all`)
-  const json = await res.json()
-  return json
+  const res = await fetch(`${APIURL}/users/all`);
+  const json: object = await res.json();
+  return json;
+};
+
+// fetch user by username
+export const fetchUserByUsername = async (username: string) => {
+  const res = await fetch(`${APIURL}/users/${username}`);
+  const json: object = await res.json();
+  return json;
+}
+
+// fetch user by id
+export const fetchUserByUserID = async (userID: number) => {
+  const res = await fetch(`${APIURL}/users/${userID}`);
+  const json: object = await res.json();
+  return json;
 }

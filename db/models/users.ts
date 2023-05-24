@@ -6,7 +6,7 @@ interface User {
   username: string, 
   password?: string, 
   avatar: string,
-  id: number
+  userID: number
 };
 
 // create user
@@ -50,7 +50,7 @@ const getUser = async ({username, password}: User) => {
 const getUserByUsername = async (username: string) => {
   try {
     const { rows: [user] } = await client.query(`
-    SELECT username, password, avatar FROM users 
+    SELECT id, username, password, avatar FROM users 
     WHERE username = $1
     `, [username]);
 
@@ -61,12 +61,12 @@ const getUserByUsername = async (username: string) => {
 };
 
 // get user by id
-const getUserById = async ({id}: User) => {
+const getUserById = async (userID: User) => {
   try {
-    const { rows: user } = await client.query(`
-    SELECT id FROM users
+    const { rows: [user] } = await client.query(`
+    SELECT id, username, avatar FROM users
     WHERE id = $1
-    `, [id])
+    `, [userID])
 
     return user;
   } catch (error) {
@@ -88,7 +88,7 @@ const getAllUsers = async () => {
 }
 
 // edit user
-const updateUser = async ({id}: User, ...fields: any) => {
+const updateUser = async (userID: User, ...fields: any) => {
   try {
     const setString = Object.keys(fields)
       .map((key, index) => `"${key}"=$${index + 1}`)
@@ -97,7 +97,7 @@ const updateUser = async ({id}: User, ...fields: any) => {
     const { rows: user } = await client.query(`
     UPDATE users
     SET ${setString}
-    WHERE id = ${id}
+    WHERE id = ${userID}
     RETURNING *
     `, Object.values(fields));
 
@@ -108,13 +108,13 @@ const updateUser = async ({id}: User, ...fields: any) => {
 }
 
 // delete/deactivate user
-const deleteUser = async ({id}: User) => {
+const deleteUser = async (userID: User) => {
   try {
     const { rows: user } = await client.query(`
     UPDATE users
     SET "isActive" = 'false'
-    WHERE id =${id}
-    `, [id]);
+    WHERE id =${userID}
+    `, [userID]);
 
     return user;
   } catch (error) {

@@ -47,12 +47,12 @@ usersRouter.post('/register', async (req: Request, res: Response, next: NextFunc
   // check if username exists
   const existingUser: boolean = await getUserByUsername(username);
   if (existingUser) {
-    return res.status(400).json({ message: 'Username already taken'})  
+    return res.status(400).json({ message: 'Username already taken' })  
   }
   
   // validate password lenght
   if (password.length < 8) {
-    return res.status(400).json({ message: 'Password must be at least 8 characters long...'})
+    return res.status(400).json({ message: 'Password must be at least 8 characters long...' })
   }
 
   const register: object = await createUser({username, password, avatar});
@@ -81,15 +81,27 @@ usersRouter.patch('/deleteuser', async (req: Request, res: Response, next: NextF
 
 // getuserbyusername
 usersRouter.get('/:username', async (req: Request, res: Response, next: NextFunction) => {
-  const  username = req.params.username
+  const username = req.params.username
   const user = await getUserByUsername(username)
 
   if (!user) {
-    return res.status(400).json({ message: 'User does not exist'})
+    return res.status(400).json({ message: 'User does not exist' })
   }
 
   // delete password
   delete user.password
+
+  res.send(user)
+})
+
+// getuserbyid
+usersRouter.get('/id/:userID', async(req: Request, res: Response, next: NextFunction) => {
+  const userID = parseInt(req.params.userID);
+  const user = await getUserById(userID)
+
+  if (!user) {
+    return res.status(400).json({ message: 'User does not exist' })
+  }
 
   res.send(user)
 })
