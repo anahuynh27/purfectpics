@@ -32,7 +32,7 @@ const createUser = ({ username, password, avatar }) => __awaiter(void 0, void 0,
 const getUserByUsername = (username) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { rows: [user] } = yield client.query(`
-    SELECT username, password FROM users 
+    SELECT username FROM users 
     WHERE username = $1
     `, [username]);
         return user;
@@ -71,11 +71,10 @@ const getUserById = ({ id }) => __awaiter(void 0, void 0, void 0, function* () {
 // get all users
 const getAllUsers = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        console.log('got in here get all users');
-        const { rows: user } = yield client.query(`
-    SELECT username FROM users
+        const { rows: users } = yield client.query(`
+    SELECT id, username, avatar FROM users
     `);
-        return user;
+        return users;
     }
     catch (error) {
         console.error(error);

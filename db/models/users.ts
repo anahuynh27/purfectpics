@@ -1,6 +1,7 @@
 const { client } = require('../client');
 const bcrypt = require('bcrypt');
 
+// interface
 interface User { 
   username: string, 
   password: string, 
@@ -12,7 +13,6 @@ interface User {
 const createUser = async ({username, password, avatar}:User) => {
   try {
     const SALT_COUNT = 10;
-
     const hashedPassword = await bcrypt.hash(password, SALT_COUNT);
 
     const { rows: user } = await client.query(`
@@ -31,7 +31,7 @@ const createUser = async ({username, password, avatar}:User) => {
 const getUserByUsername = async (username:string) => {
   try {
     const { rows: [user] } = await client.query(`
-    SELECT username, password FROM users 
+    SELECT username FROM users 
     WHERE username = $1
     `, [username]);
 
@@ -73,12 +73,11 @@ const getUserById = async ({id}:User) => {
 // get all users
 const getAllUsers = async () => {
   try {
-    console.log('got in here get all users')
-    const { rows: user } = await client.query(`
-    SELECT username FROM users
+    const { rows: users } = await client.query(`
+    SELECT id, username, avatar FROM users
     `)
 
-    return user;
+    return users;
   } catch (error) {
     console.error(error);
   }

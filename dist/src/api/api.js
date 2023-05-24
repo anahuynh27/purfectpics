@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.fetchUsers = exports.fetchLogin = exports.APIURL = void 0;
+exports.fetchUsers = exports.fetchRegister = exports.fetchLogin = exports.APIURL = void 0;
 // local server
 exports.APIURL = 'http://localhost:3000/api';
 // login user 
@@ -28,6 +28,23 @@ const fetchLogin = (username, password) => __awaiter(void 0, void 0, void 0, fun
     return json;
 });
 exports.fetchLogin = fetchLogin;
+// register user
+const fetchRegister = (username, password, avatar) => __awaiter(void 0, void 0, void 0, function* () {
+    const res = yield fetch(`${exports.APIURL}/users/register`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            username: `${username}`,
+            password: `${password}`,
+            avatar: `${avatar}`,
+        }),
+    });
+    const json = yield res.json();
+    return json;
+});
+exports.fetchRegister = fetchRegister;
 // fetch all users
 const fetchUsers = () => __awaiter(void 0, void 0, void 0, function* () {
     const res = yield fetch(`${exports.APIURL}/users/all`);
