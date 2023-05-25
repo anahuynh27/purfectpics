@@ -59,7 +59,7 @@ usersRouter.post('/register', (req, res, next) => __awaiter(void 0, void 0, void
     ;
     const register = yield createUser({ username, password, avatar });
     // sign jwt
-    const token = jwt.sign({ id: register.id, password: password }, JWT_SECRET);
+    const token = jwt.sign({ id: register.id, username: username }, JWT_SECRET);
     res.send({
         token,
         message: `Registration successful! Welcome, ${username} 🐾`,
