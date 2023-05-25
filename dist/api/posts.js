@@ -16,7 +16,7 @@ const express_1 = __importDefault(require("express"));
 const postsRouter = express_1.default.Router();
 ;
 const { createPost, } = require('../db/models/posts');
-// create post
+// create post ~~ must be logged in to create a post ~~
 postsRouter.post('/create', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { title, photo, content } = req.body;
     // validate title lenght

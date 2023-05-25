@@ -15,7 +15,7 @@ const {
   createPost,
 } = require('../db/models/posts');
 
-// create post
+// create post ~~ must be logged in to create a post ~~
 postsRouter.post('/create', async (req: Request, res: Response, next: NextFunction) => {
   const { title, photo, content }: Post = req.body;
 
