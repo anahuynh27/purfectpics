@@ -16,6 +16,11 @@ const express_1 = __importDefault(require("express"));
 const usersRouter = express_1.default.Router();
 ;
 const { getUser, getAllUsers, getUserByUsername, getUserById, createUser, updateUser, deleteUser } = require('../db/models/users');
+// import require user from utils
+const requireUser = require('./utils');
+// import jwt
+const jwt = require('jsonwebtoken');
+const { JWT_SECRET } = process.env;
 // getalluser
 usersRouter.get('/all', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const users = yield getAllUsers();
@@ -30,7 +35,10 @@ usersRouter.post('/login', (req, res, next) => __awaiter(void 0, void 0, void 0,
         return res.status(401).json(({ message: 'Invalid username or password' }));
     }
     ;
+    // sign jwt
+    const token = jwt.sign({ id: user.id, username: username }, JWT_SECRET);
     res.send({
+        token,
         message: `Welcome back, ${username}! 🐾`,
         user
     });
@@ -50,7 +58,10 @@ usersRouter.post('/register', (req, res, next) => __awaiter(void 0, void 0, void
     }
     ;
     const register = yield createUser({ username, password, avatar });
+    // sign jwt
+    const token = jwt.sign({ id: register.id, password: password }, JWT_SECRET);
     res.send({
+        token,
         message: `Registration successful! Welcome, ${username} 🐾`,
         register
     });

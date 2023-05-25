@@ -18,6 +18,13 @@ const {
   deleteUser
 } = require('../db/models/users');
 
+// import require user from utils
+const requireUser = require('./utils');
+
+// import jwt
+const jwt = require('jsonwebtoken');
+const { JWT_SECRET } = process.env;
+
 // getalluser
 usersRouter.get('/all', async (req: Request, res: Response, next: NextFunction) => {
   const users: object = await getAllUsers();
@@ -27,14 +34,18 @@ usersRouter.get('/all', async (req: Request, res: Response, next: NextFunction) 
 // getuser / login
 usersRouter.post('/login', async (req: Request, res: Response, next: NextFunction) => {
   const { username, password }: User = req.body;
-  const user: object = await getUser({username, password});
+  const user = await getUser({username, password});
 
   // invalid username
   if (!user) {
     return res.status(401).json(({ message: 'Invalid username or password' }));
   };
 
+  // sign jwt
+  const token = jwt.sign({ id: user.id, username: username }, JWT_SECRET);
+
   res.send({
+    token,
     message: `Welcome back, ${username}! 🐾`,
     user
   });
@@ -55,9 +66,13 @@ usersRouter.post('/register', async (req: Request, res: Response, next: NextFunc
     return res.status(400).json({ message: 'Password must be at least 8 characters long...' })
   };
 
-  const register: object = await createUser({username, password, avatar});
+  const register = await createUser({username, password, avatar});
+
+  // sign jwt
+  const token = jwt.sign({ id: register.id, password: password}, JWT_SECRET);
 
   res.send({
+    token,
     message: `Registration successful! Welcome, ${username} 🐾`,
     register
   });
