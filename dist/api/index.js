@@ -11,8 +11,8 @@ apiRouter.get('/', (req, res, next) => {
     });
 });
 //routers
-// const postsRouter = require('./posts')
-// apiRouter.use('/posts', postsRouter)
+const postsRouter = require('./posts');
+apiRouter.use('/posts', postsRouter);
 const usersRouter = require('./users');
 apiRouter.use('/users', usersRouter);
 module.exports = apiRouter;
