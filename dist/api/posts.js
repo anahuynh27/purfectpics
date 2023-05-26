@@ -15,7 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const postsRouter = express_1.default.Router();
 ;
-const { createPost, getAllPosts, getAllActivePosts, getPostById, } = require('../db/models/posts');
+const { createPost, getAllPosts, getAllActivePosts, getPostById, getPostByUserID } = require('../db/models/posts');
 // import require user from utils
 const requireUser = require('./utils');
 // create post ~~ must be logged in to create a post ~~
@@ -47,6 +47,11 @@ postsRouter.get('/active', (req, res, next) => __awaiter(void 0, void 0, void 0,
 postsRouter.get('/:postID', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const id = parseInt(req.params.postID);
     const post = yield getPostById({ id });
+    res.send(post);
+}));
+postsRouter.get('/user/:userID', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const userID = parseInt(req.params.userID);
+    const post = yield getPostByUserID({ userID });
     res.send(post);
 }));
 module.exports = postsRouter;

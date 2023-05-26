@@ -22,19 +22,21 @@ const createPost = ({ title, content, userID, photo }) => __awaiter(void 0, void
     catch (error) {
         console.error(error);
     }
+    ;
 });
 //get all active posts
 const getAllActivePosts = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { rows: posts } = yield client.query(`
-    SELECT * FROM posts
-    WHERE "isactive" = 'true';
-    `);
+        SELECT * FROM posts
+        WHERE "isactive" = 'true';
+        `);
         return posts;
     }
     catch (error) {
         console.error(error);
     }
+    ;
 });
 // get all posts
 const getAllPosts = () => __awaiter(void 0, void 0, void 0, function* () {
@@ -47,6 +49,7 @@ const getAllPosts = () => __awaiter(void 0, void 0, void 0, function* () {
     catch (error) {
         console.error(error);
     }
+    ;
 });
 //updatePost
 const updatePost = ({ id }, ...fields) => __awaiter(void 0, void 0, void 0, function* () {
@@ -65,6 +68,7 @@ const updatePost = ({ id }, ...fields) => __awaiter(void 0, void 0, void 0, func
     catch (error) {
         console.error(error);
     }
+    ;
 });
 //getPostById
 const getPostById = ({ id }) => __awaiter(void 0, void 0, void 0, function* () {
@@ -78,9 +82,21 @@ const getPostById = ({ id }) => __awaiter(void 0, void 0, void 0, function* () {
     catch (error) {
         console.error(error);
     }
+    ;
 });
 //get posts by user
-const getPostByUser = () => __awaiter(void 0, void 0, void 0, function* () {
+const getPostByUserID = ({ userID }) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { rows: [post] } = yield client.query(`
+        SELECT * FROM posts
+        WHERE "userID" = $1
+        `, [userID]);
+        return post;
+    }
+    catch (error) {
+        console.error(error);
+    }
+    ;
 });
 //get post by tag name
 module.exports = {
@@ -89,4 +105,5 @@ module.exports = {
     getAllActivePosts,
     getAllPosts,
     getPostById,
+    getPostByUserID,
 };

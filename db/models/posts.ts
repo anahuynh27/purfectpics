@@ -19,21 +19,21 @@ const createPost = async ({title, content, userID, photo}: Posts) => {
         return post; 
     } catch (error) {
         console.error(error);
-    }
+    };
 };
 
 //get all active posts
 const getAllActivePosts = async () => {
-try {
-    const { rows: posts } = await client.query(`
-    SELECT * FROM posts
-    WHERE "isactive" = 'true';
-    `);
+    try {
+        const { rows: posts } = await client.query(`
+        SELECT * FROM posts
+        WHERE "isactive" = 'true';
+        `);
 
-    return posts;
-} catch (error) {
-    console.error(error);
-}
+        return posts;
+    } catch (error) {
+        console.error(error);
+    };
 };
 
 // get all posts
@@ -46,7 +46,7 @@ const getAllPosts = async () => {
         return posts;
     } catch (error) {
         console.error(error);
-    }
+    };
 };
 
 //updatePost
@@ -61,13 +61,13 @@ const updatePost = async ({id}:Posts, ...fields: []) => {
         SET ${setString}
         WHERE id=${id}
         RETURNING *
-        `, Object.values(fields))
+        `, Object.values(fields));
 
-        return posts
+        return posts;
     } catch (error) {
-        console.error(error)
-    }
-}
+        console.error(error);
+    };
+};
 
 //getPostById
 const getPostById = async ({ id }: Posts) => {
@@ -80,13 +80,22 @@ const getPostById = async ({ id }: Posts) => {
         return post;
     } catch (error) {
         console.error(error);
-    }
-}
+    };
+};
 
 //get posts by user
-const getPostByUser = async () => {
-    
-}
+const getPostByUserID = async ({ userID }: Posts) => {
+    try {
+        const { rows: [post] } = await client.query(`
+        SELECT * FROM posts
+        WHERE "userID" = $1
+        `, [userID])
+
+        return post
+    } catch (error) {
+        console.error(error);
+    };
+};
 
 //get post by tag name
 
@@ -96,4 +105,5 @@ module.exports = {
     getAllActivePosts,
     getAllPosts,
     getPostById,
+    getPostByUserID,
 }
