@@ -12,7 +12,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const { client } = require('../client');
 const createPost = ({ title, content, userID, photo }) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        console.log({ title, content, userID, photo }, 'inside models');
         const { rows: [post] } = yield client.query(`
         INSERT INTO posts(title, content, "userID", photo)
         VALUES ($1, $2, $3, $4)
@@ -31,7 +30,6 @@ const getAllActivePosts = () => __awaiter(void 0, void 0, void 0, function* () {
     SELECT * FROM posts
     WHERE "isactive" = 'true';
     `);
-        console.log(posts);
         return posts;
     }
     catch (error) {
@@ -44,7 +42,6 @@ const getAllPosts = () => __awaiter(void 0, void 0, void 0, function* () {
         const { rows: posts } = yield client.query(`
         SELECT * FROM posts
         `);
-        console.log({ posts });
         return posts;
     }
     catch (error) {
@@ -73,8 +70,7 @@ const updatePost = ({ id }, ...fields) => __awaiter(void 0, void 0, void 0, func
 const getPostById = ({ id }) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { rows: [post] } = yield client.query(`
-        SELECT *
-        FROM posts
+        SELECT * FROM posts
         WHERE id = $1
         `, [id]);
         return post;
@@ -92,4 +88,5 @@ module.exports = {
     updatePost,
     getAllActivePosts,
     getAllPosts,
+    getPostById,
 };

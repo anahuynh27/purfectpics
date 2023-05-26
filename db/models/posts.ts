@@ -10,7 +10,6 @@ interface Posts {
 }
 const createPost = async ({title, content, userID, photo}: Posts) => {
     try {
-        console.log({title, content, userID, photo}, 'inside models')
         const { rows: [post] } = await client.query(`
         INSERT INTO posts(title, content, "userID", photo)
         VALUES ($1, $2, $3, $4)
@@ -31,7 +30,6 @@ try {
     WHERE "isactive" = 'true';
     `);
 
-    console.log(posts);
     return posts;
 } catch (error) {
     console.error(error);
@@ -45,7 +43,6 @@ const getAllPosts = async () => {
         SELECT * FROM posts
         `);
 
-        console.log({posts});
         return posts;
     } catch (error) {
         console.error(error);
@@ -73,11 +70,10 @@ const updatePost = async ({id}:Posts, ...fields: []) => {
 }
 
 //getPostById
-const getPostById = async ({id}:Posts) => {
+const getPostById = async ({ id }: Posts) => {
     try {
         const { rows: [post] } = await client.query(`
-        SELECT *
-        FROM posts
+        SELECT * FROM posts
         WHERE id = $1
         `, [id]);
 
@@ -99,4 +95,5 @@ module.exports = {
     updatePost,
     getAllActivePosts,
     getAllPosts,
+    getPostById,
 }

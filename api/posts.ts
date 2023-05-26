@@ -15,6 +15,7 @@ const {
   createPost,
   getAllPosts,
   getAllActivePosts,
+  getPostById,
 } = require('../db/models/posts');
 
 // import require user from utils
@@ -49,6 +50,14 @@ postsRouter.get('/', async (req: Request, res: Response, next: NextFunction) => 
 postsRouter.get('/active', async (req: Request, res: Response, next: NextFunction) => {
   const activePosts: object = await getAllActivePosts();
   res.send(activePosts)
+})
+
+// get post by id
+postsRouter.get('/:postID', async (req: Request, res: Response, next: NextFunction) => {
+  const id = parseInt(req.params.postID)
+
+  const post: object = await getPostById({id})
+  res.send(post)
 })
 
 module.exports = postsRouter
