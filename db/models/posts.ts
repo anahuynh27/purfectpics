@@ -4,18 +4,18 @@ interface Posts {
     id: number,
     title: string, 
     content: string, 
-    usersID: number, 
+    userID: number, 
     isActive: boolean, 
     photo: string
 }
-const createPost = async ({title, content, usersID, photo}: Posts) => {
+const createPost = async ({title, content, userID, photo}: Posts) => {
     try {
-        console.log({title, content, usersID, photo}, 'inside models')
+        console.log({title, content, userID, photo}, 'inside models')
         const { rows: [post] } = await client.query(`
-        INSERT INTO posts(title, content, "usersID", photo)
+        INSERT INTO posts(title, content, "userID", photo)
         VALUES ($1, $2, $3, $4)
         RETURNING *
-        `, [title, content, usersID, photo]);
+        `, [title, content, userID, photo]);
 
         return post; 
     } catch (error) {

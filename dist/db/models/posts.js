@@ -10,14 +10,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const { client } = require('../client');
-const createPost = ({ title, content, usersID, photo }) => __awaiter(void 0, void 0, void 0, function* () {
+const createPost = ({ title, content, userID, photo }) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        console.log({ title, content, usersID, photo }, 'inside models');
+        console.log({ title, content, userID, photo }, 'inside models');
         const { rows: [post] } = yield client.query(`
-        INSERT INTO posts(title, content, "usersID", photo)
+        INSERT INTO posts(title, content, "userID", photo)
         VALUES ($1, $2, $3, $4)
         RETURNING *
-        `, [title, content, usersID, photo]);
+        `, [title, content, userID, photo]);
         return post;
     }
     catch (error) {

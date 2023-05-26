@@ -49,15 +49,15 @@ function createTables() {
             title VARCHAR(225),
             content VARCHAR(225),
             isActive BOOLEAN DEFAULT true, 
-            "usersID" INTEGER REFERENCES users(id),
+            "userID" INTEGER REFERENCES users(id),
             photo TEXT
         );
 
         CREATE TABLE comments (
             id SERIAL PRIMARY KEY, 
             content TEXT, 
-            "postsID" INTEGER REFERENCES posts(id),
-            "usersID" INTEGER REFERENCES users(id)
+            "postID" INTEGER REFERENCES posts(id),
+            "userID" INTEGER REFERENCES users(id)
         );
 
         CREATE TABLE tags (
@@ -67,8 +67,8 @@ function createTables() {
 
         CREATE TABLE post_tags (
             id SERIAL PRIMARY KEY, 
-            "postsID" INTEGER REFERENCES posts(id),
-            "usersID" INTEGER REFERENCES users(id)
+            "postID" INTEGER REFERENCES posts(id),
+            "userID" INTEGER REFERENCES users(id)
         );
         `);
             console.log("Finished creating tables...");
@@ -118,19 +118,19 @@ const createInitalPosts = () => __awaiter(void 0, void 0, void 0, function* () {
             {
                 title: 'my dog is the cutest everrrrr',
                 content: 'JUST LOOK AT THAT FACE',
-                usersID: 3,
+                userID: 3,
                 photo: 'not available'
             },
             {
                 title: 'smelly farts',
                 content: 'my dog ate too much cheese. It stanky!',
-                usersID: 1,
+                userID: 1,
                 photo: 'not available'
             },
             {
                 title: 'park time!',
                 content: 'beautiful sunset with my owner',
-                usersID: 2,
+                userID: 2,
                 photo: 'not available'
             }
         ];

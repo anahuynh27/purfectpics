@@ -23,15 +23,15 @@ const requireUser = require('./utils');
 // create post ~~ must be logged in to create a post ~~
 postsRouter.post('/create', requireUser, async (req: any, res: Response, next: NextFunction) => {
   const { title, photo, content }: Post = req.body;
-  const usersID: number = req.user.id;
-  console.log({usersID})
+  const userID: number = parseInt(req.user.id);
+  console.log({userID})
 
   // validate title lenght
   if (title.length < 1) {
     return res.status(400).json({ message: 'Title cannot be empty' })
   };
 
-  const post: object = await createPost({ title, content, usersID, photo });
+  const post: object = await createPost({ title, content, userID, photo });
 
   res.send({
     message: `Post created successfully! 🐾`,
