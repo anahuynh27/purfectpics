@@ -25,7 +25,6 @@ const requireUser = require('./utils');
 postsRouter.post('/create', requireUser, async (req: any, res: Response, next: NextFunction) => {
   const { title, photo, content }: Post = req.body;
   const userID: number = parseInt(req.user.id);
-  console.log({userID})
 
   // validate title lenght
   if (title.length < 1) {
@@ -43,21 +42,20 @@ postsRouter.post('/create', requireUser, async (req: any, res: Response, next: N
 // all posts
 postsRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
   const posts: object = await getAllPosts();
-  res.send(posts)
+  res.send(posts);
 });
 
 // all active posts
 postsRouter.get('/active', async (req: Request, res: Response, next: NextFunction) => {
   const activePosts: object = await getAllActivePosts();
-  res.send(activePosts)
-})
+  res.send(activePosts);
+});
 
 // get post by id
 postsRouter.get('/:postID', async (req: Request, res: Response, next: NextFunction) => {
-  const id = parseInt(req.params.postID)
-
-  const post: object = await getPostById({id})
-  res.send(post)
-})
+  const id = parseInt(req.params.postID);
+  const post: object = await getPostById({id});
+  res.send(post);
+});
 
 module.exports = postsRouter

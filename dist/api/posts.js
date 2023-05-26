@@ -22,7 +22,6 @@ const requireUser = require('./utils');
 postsRouter.post('/create', requireUser, (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { title, photo, content } = req.body;
     const userID = parseInt(req.user.id);
-    console.log({ userID });
     // validate title lenght
     if (title.length < 1) {
         return res.status(400).json({ message: 'Title cannot be empty' });
