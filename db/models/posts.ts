@@ -4,17 +4,18 @@ interface Posts {
     id: number,
     title: string, 
     content: string, 
-    usersId: number, 
+    usersID: number, 
     isActive: boolean, 
     photo: string
 }
-const createPost = async ({title, content, usersId, isActive, photo}:Posts) => {
+const createPost = async ({title, content, usersID, photo}: Posts) => {
     try {
+        console.log({title, content, usersID, photo}, 'inside models')
         const { rows: [post] } = await client.query(`
-        INSERT INTO posts(title, content, "usersId", photo)
+        INSERT INTO posts(title, content, "usersID", photo)
         VALUES ($1, $2, $3, $4)
         RETURNING *
-        `, [title, content, usersId, photo]);
+        `, [title, content, usersID, photo]);
 
         return post; 
     } catch (error) {
@@ -26,9 +27,8 @@ const createPost = async ({title, content, usersId, isActive, photo}:Posts) => {
 const getAllActivePosts = async () => {
 try {
     const { rows: posts } = await client.query(`
-    SELECT id
-    FROM posts
-    WHERE "isActive" = 'true';
+    SELECT * FROM posts
+    WHERE "isactive" = 'true';
     `);
 
     console.log(posts);
@@ -38,12 +38,26 @@ try {
 }
 };
 
+// get all posts
+const getAllPosts = async () => {
+    try {
+        const { rows: posts } = await client.query(`
+        SELECT * FROM posts
+        `);
+
+        console.log({posts});
+        return posts;
+    } catch (error) {
+        console.error(error);
+    }
+};
+
 //updatePost
 const updatePost = async ({id}:Posts, ...fields: []) => {
     try {
         const setString = Object.keys(fields)
         .map((key, index) => `"${key}=$${index + 1}`)
-        .join(", ")
+        .join(", ");
         
         const { rows: [posts] } = await client.query(`
         UPDATE posts
@@ -84,4 +98,5 @@ module.exports = {
     createPost,
     updatePost,
     getAllActivePosts,
+    getAllPosts,
 }

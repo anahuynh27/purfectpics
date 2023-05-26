@@ -10,13 +10,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const { client } = require('../client');
-const createPost = ({ title, content, usersId, isActive, photo }) => __awaiter(void 0, void 0, void 0, function* () {
+const createPost = ({ title, content, usersID, photo }) => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        console.log({ title, content, usersID, photo }, 'inside models');
         const { rows: [post] } = yield client.query(`
-        INSERT INTO posts(title, content, "usersId", photo)
+        INSERT INTO posts(title, content, "usersID", photo)
         VALUES ($1, $2, $3, $4)
         RETURNING *
-        `, [title, content, usersId, photo]);
+        `, [title, content, usersID, photo]);
         return post;
     }
     catch (error) {
@@ -27,11 +28,23 @@ const createPost = ({ title, content, usersId, isActive, photo }) => __awaiter(v
 const getAllActivePosts = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { rows: posts } = yield client.query(`
-    SELECT id
-    FROM posts
-    WHERE "isActive" = 'true';
+    SELECT * FROM posts
+    WHERE "isactive" = 'true';
     `);
         console.log(posts);
+        return posts;
+    }
+    catch (error) {
+        console.error(error);
+    }
+});
+// get all posts
+const getAllPosts = () => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { rows: posts } = yield client.query(`
+        SELECT * FROM posts
+        `);
+        console.log({ posts });
         return posts;
     }
     catch (error) {
@@ -78,4 +91,5 @@ module.exports = {
     createPost,
     updatePost,
     getAllActivePosts,
+    getAllPosts,
 };

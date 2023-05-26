@@ -15,21 +15,33 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const postsRouter = express_1.default.Router();
 ;
-const { createPost, } = require('../db/models/posts');
+const { createPost, getAllPosts, getAllActivePosts, } = require('../db/models/posts');
 // import require user from utils
 const requireUser = require('./utils');
 // create post ~~ must be logged in to create a post ~~
 postsRouter.post('/create', requireUser, (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { title, photo, content } = req.body;
+    const usersID = req.user.id;
+    console.log({ usersID });
     // validate title lenght
     if (title.length < 1) {
         return res.status(400).json({ message: 'Title cannot be empty' });
     }
     ;
-    const post = yield createPost({ title, photo, content });
+    const post = yield createPost({ title, content, usersID, photo });
     res.send({
         message: `Post created successfully! 🐾`,
         post
     });
+}));
+// all posts
+postsRouter.get('/', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const posts = yield getAllPosts();
+    res.send(posts);
+}));
+// all active posts
+postsRouter.get('/active', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const activePosts = yield getAllActivePosts();
+    res.send(activePosts);
 }));
 module.exports = postsRouter;
