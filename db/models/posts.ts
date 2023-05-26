@@ -86,7 +86,7 @@ const getPostById = async ({ id }: Posts) => {
 //get posts by user
 const getPostByUserID = async ({ userID }: Posts) => {
     try {
-        const { rows: [post] } = await client.query(`
+        const { rows: post } = await client.query(`
         SELECT * FROM posts
         WHERE "userID" = $1
         `, [userID])

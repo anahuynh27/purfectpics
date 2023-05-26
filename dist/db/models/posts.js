@@ -87,7 +87,7 @@ const getPostById = ({ id }) => __awaiter(void 0, void 0, void 0, function* () {
 //get posts by user
 const getPostByUserID = ({ userID }) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { rows: [post] } = yield client.query(`
+        const { rows: post } = yield client.query(`
         SELECT * FROM posts
         WHERE "userID" = $1
         `, [userID]);
