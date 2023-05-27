@@ -10,10 +10,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const { client } = require('../client');
-;
 const createPost = ({ title, content, userID, photo }) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { rows: [post] } = yield client.query(`
+        const { rows: [post], } = yield client.query(`
         INSERT INTO posts(title, content, "userID", photo)
         VALUES ($1, $2, $3, $4)
         RETURNING *
@@ -23,7 +22,6 @@ const createPost = ({ title, content, userID, photo }) => __awaiter(void 0, void
     catch (error) {
         console.error(error);
     }
-    ;
 });
 //get all active posts
 const getAllActivePosts = () => __awaiter(void 0, void 0, void 0, function* () {
@@ -37,7 +35,6 @@ const getAllActivePosts = () => __awaiter(void 0, void 0, void 0, function* () {
     catch (error) {
         console.error(error);
     }
-    ;
 });
 // get all posts
 const getAllPosts = () => __awaiter(void 0, void 0, void 0, function* () {
@@ -50,15 +47,14 @@ const getAllPosts = () => __awaiter(void 0, void 0, void 0, function* () {
     catch (error) {
         console.error(error);
     }
-    ;
 });
 //updatePost
 const updatePost = (postID, fields) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const setString = Object.keys(fields)
             .map((key, index) => `"${key}"=$${index + 1}`)
-            .join(", ");
-        const { rows: [posts] } = yield client.query(`
+            .join(', ');
+        const { rows: [posts], } = yield client.query(`
         UPDATE posts
         SET ${setString}
         WHERE "id" = ${postID}
@@ -69,12 +65,11 @@ const updatePost = (postID, fields) => __awaiter(void 0, void 0, void 0, functio
     catch (error) {
         console.error(error);
     }
-    ;
 });
 //getPostById
 const getPostById = (postID) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { rows: [post] } = yield client.query(`
+        const { rows: [post], } = yield client.query(`
         SELECT * FROM posts
         WHERE id = $1
         `, [postID]);
@@ -83,7 +78,6 @@ const getPostById = (postID) => __awaiter(void 0, void 0, void 0, function* () {
     catch (error) {
         console.error(error);
     }
-    ;
 });
 //get posts by user
 const getPostByUserID = ({ userID }) => __awaiter(void 0, void 0, void 0, function* () {
@@ -97,7 +91,6 @@ const getPostByUserID = ({ userID }) => __awaiter(void 0, void 0, void 0, functi
     catch (error) {
         console.error(error);
     }
-    ;
 });
 //get post by tag name
 module.exports = {

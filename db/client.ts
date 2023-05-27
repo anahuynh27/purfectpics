@@ -1,13 +1,13 @@
-import { Client } from "pg";
+import { Client } from 'pg';
 import { config } from 'dotenv';
 
-config()
-const DB_URL = process.env.database_url
+config();
+const DB_URL = process.env.database_url;
 
 let client = new Client({
-    connectionString: DB_URL
-})
+  connectionString: DB_URL,
+});
 
 module.exports = {
-    client
-} 
+  client,
+};
