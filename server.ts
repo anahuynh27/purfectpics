@@ -26,9 +26,7 @@ const { client } = require("./db/client");
 const PORT = 3000 || process.env;
 const handle = app.listen(PORT, async () => {
     try {
-        console.log("before connecting");
         await client.connect()
-        console.log("after connecting");
         console.log(`Server is running on http://localhost:${PORT}/ 🚀`);
     } catch (error) {
         console.log('error')
