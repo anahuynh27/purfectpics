@@ -52,16 +52,17 @@ const getAllPosts = () => __awaiter(void 0, void 0, void 0, function* () {
     ;
 });
 //updatePost
-const updatePost = (postID, ...fields) => __awaiter(void 0, void 0, void 0, function* () {
+const updatePost = (postID, userID, fields) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        console.log({ postID, fields }, 'models');
+        console.log({ postID, userID, fields }, 'models');
         const setString = Object.keys(fields)
-            .map((key, index) => `"${key}=$${index + 1}`)
+            .map((key, index) => `"${key}"=$${index + 1}`)
             .join(", ");
+        console.log({ setString }, 'models');
         const { rows: [posts] } = yield client.query(`
         UPDATE posts
         SET ${setString}
-        WHERE id=${postID}
+        WHERE "id" = ${postID}
         RETURNING *
         `, Object.values(fields));
         return posts;

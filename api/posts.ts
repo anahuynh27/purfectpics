@@ -51,7 +51,15 @@ postsRouter.patch('/edit/:postID', requireUser, async (req: any, res: Response, 
 
   console.log({title, photo, content, userID, postID}, 'api')
 
-  const editPost = await updatePost(postID, { title, photo, content })
+  const fields = {
+    title,
+    content,
+    userID,
+    photo
+  }
+
+  console.log({fields}, 'api')
+  const editPost = await updatePost(postID, userID, fields)
 
   res.send({
     message: `Post updated successfully! 🐾`,

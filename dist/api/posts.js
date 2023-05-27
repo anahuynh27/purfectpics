@@ -40,7 +40,14 @@ postsRouter.patch('/edit/:postID', requireUser, (req, res, next) => __awaiter(vo
     const postID = parseInt(req.params.postID);
     // function or boolean to check if current user can edit post
     console.log({ title, photo, content, userID, postID }, 'api');
-    const editPost = yield updatePost(postID, { title, photo, content });
+    const fields = {
+        title,
+        content,
+        userID,
+        photo
+    };
+    console.log({ fields }, 'api');
+    const editPost = yield updatePost(postID, userID, fields);
     res.send({
         message: `Post updated successfully! 🐾`,
         editPost
