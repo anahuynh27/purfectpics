@@ -1,7 +1,7 @@
-import { config } from "dotenv";
-import express, { Request, Response, NextFunction } from "express";
-import cors from "cors";
-import morgan from "morgan";
+import { config } from 'dotenv';
+import express, { Request, Response, NextFunction } from 'express';
+import cors from 'cors';
+import morgan from 'morgan';
 
 //dotenv
 config();
@@ -12,24 +12,24 @@ const app = express();
 //middleware
 app.use(express.json());
 app.use(cors());
-app.use(morgan("dev"));
+app.use(morgan('dev'));
 
-app.get("/", (req: Request, res: Response, next: NextFunction) => {
-    res.send("Server Online");
+app.get('/', (req: Request, res: Response, next: NextFunction) => {
+  res.send('Server Online');
 });
 
-const apiRouter = require("./api");
-app.use("/api", apiRouter);
+const apiRouter = require('./api');
+app.use('/api', apiRouter);
 
-const { client } = require("./db/client");
+const { client } = require('./db/client');
 
 const PORT = 3000 || process.env;
 const handle = app.listen(PORT, async () => {
-    try {
-        await client.connect()
-        console.log(`Server is running on http://localhost:${PORT}/ 🚀`);
-    } catch (error) {
-        console.log('error')
-        handle.close()
-    }
+  try {
+    await client.connect();
+    console.log(`Server is running on http://localhost:${PORT}/ 🚀`);
+  } catch (error) {
+    console.log('error');
+    handle.close();
+  }
 });

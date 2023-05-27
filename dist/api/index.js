@@ -41,7 +41,7 @@ apiRouter.use((req, res, next) => __awaiter(void 0, void 0, void 0, function* ()
 }));
 apiRouter.get('/', (req, res, next) => {
     res.send({
-        message: "Server is online"
+        message: 'Server is online',
     });
 });
 //routers

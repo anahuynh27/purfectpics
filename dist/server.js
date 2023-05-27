@@ -23,13 +23,13 @@ const app = (0, express_1.default)();
 //middleware
 app.use(express_1.default.json());
 app.use((0, cors_1.default)());
-app.use((0, morgan_1.default)("dev"));
-app.get("/", (req, res, next) => {
-    res.send("Server Online");
+app.use((0, morgan_1.default)('dev'));
+app.get('/', (req, res, next) => {
+    res.send('Server Online');
 });
-const apiRouter = require("./api");
-app.use("/api", apiRouter);
-const { client } = require("./db/client");
+const apiRouter = require('./api');
+app.use('/api', apiRouter);
+const { client } = require('./db/client');
 const PORT = 3000 || process.env;
 const handle = app.listen(PORT, () => __awaiter(void 0, void 0, void 0, function* () {
     try {

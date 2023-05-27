@@ -1,4 +1,4 @@
-import express, {Request, Response, NextFunction} from "express";
+import express, { Request, Response, NextFunction } from 'express';
 const apiRouter = express.Router();
 const { getUserById } = require('../db/models/users');
 
@@ -9,7 +9,7 @@ const { JWT_SECRET } = process.env;
 // check authorization
 apiRouter.use(async (req: any, res: Response, next: NextFunction) => {
   const prefix = 'Bearer ';
-  const auth = req.header('Authorization')
+  const auth = req.header('Authorization');
 
   if (!auth) {
     next();
@@ -24,14 +24,14 @@ apiRouter.use(async (req: any, res: Response, next: NextFunction) => {
         next();
       }
     } catch (error) {
-      console.error(error, 'error with jwt assignment')
+      console.error(error, 'error with jwt assignment');
     }
   }
 });
 
 apiRouter.get('/', (req: Request, res: Response, next: NextFunction) => {
   res.send({
-    message: "Server is online"
+    message: 'Server is online',
   });
 });
 

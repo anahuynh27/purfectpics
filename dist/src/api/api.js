@@ -12,7 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.fetchUserByUserID = exports.fetchUserByUsername = exports.fetchUsers = exports.fetchRegister = exports.fetchLogin = exports.APIURL = void 0;
 // local server
 exports.APIURL = 'http://localhost:3000/api';
-// login user 
+// login user
 const fetchLogin = (username, password) => __awaiter(void 0, void 0, void 0, function* () {
     const res = yield fetch(`${exports.APIURL}/users/login`, {
         method: 'POST',
@@ -21,7 +21,7 @@ const fetchLogin = (username, password) => __awaiter(void 0, void 0, void 0, fun
         },
         body: JSON.stringify({
             username: `${username}`,
-            password: `${password}`
+            password: `${password}`,
         }),
     });
     const json = yield res.json();

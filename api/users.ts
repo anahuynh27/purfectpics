@@ -1,12 +1,12 @@
-import express, {Request, Response, NextFunction} from 'express';
+import express, { Request, Response, NextFunction } from 'express';
 const usersRouter = express.Router();
 
 // interface
 interface User {
-  username: string,
-  password: string,
-  avatar: string
-};
+  username: string;
+  password: string;
+  avatar: string;
+}
 
 const {
   getUser,
@@ -15,7 +15,7 @@ const {
   getUserById,
   createUser,
   updateUser,
-  deleteUser
+  deleteUser,
 } = require('../db/models/users');
 
 // import require user from utils
@@ -29,17 +29,17 @@ const { JWT_SECRET } = process.env;
 usersRouter.get('/all', async (req: Request, res: Response, next: NextFunction) => {
   const users: object = await getAllUsers();
   res.send(users);
-})
+});
 
 // getuser / login
 usersRouter.post('/login', async (req: Request, res: Response, next: NextFunction) => {
   const { username, password }: User = req.body;
-  const user = await getUser({username, password});
+  const user = await getUser({ username, password });
 
   // invalid username
   if (!user) {
-    return res.status(401).json(({ message: 'Invalid username or password' }));
-  };
+    return res.status(401).json({ message: 'Invalid username or password' });
+  }
 
   // sign jwt
   const token = jwt.sign({ id: user.id, username: username }, JWT_SECRET);
@@ -47,7 +47,7 @@ usersRouter.post('/login', async (req: Request, res: Response, next: NextFunctio
   res.send({
     token,
     message: `Welcome back, ${username}! 🐾`,
-    user
+    user,
   });
 });
 
@@ -58,23 +58,23 @@ usersRouter.post('/register', async (req: Request, res: Response, next: NextFunc
   // check if username exists
   const existingUser: boolean = await getUserByUsername(username);
   if (existingUser) {
-    return res.status(400).json({ message: 'Username already taken' })  
-  };
-  
+    return res.status(400).json({ message: 'Username already taken' });
+  }
+
   // validate password lenght
   if (password.length < 8) {
-    return res.status(400).json({ message: 'Password must be at least 8 characters long...' })
-  };
+    return res.status(400).json({ message: 'Password must be at least 8 characters long...' });
+  }
 
-  const register = await createUser({username, password, avatar});
+  const register = await createUser({ username, password, avatar });
 
   // sign jwt
-  const token = jwt.sign({ id: register.id, username: username}, JWT_SECRET);
+  const token = jwt.sign({ id: register.id, username: username }, JWT_SECRET);
 
   res.send({
     token,
     message: `Registration successful! Welcome, ${username} 🐾`,
-    register
+    register,
   });
 });
 
@@ -85,19 +85,19 @@ usersRouter.patch('/edit/:userID', async (req: Request, res: Response, next: Nex
 
   // validate password lenght
   if (password.length < 8) {
-    return res.status(400).json({ message: 'Password must be at least 8 characters long...' })
-  };
+    return res.status(400).json({ message: 'Password must be at least 8 characters long...' });
+  }
 
   const fields = {
     username: username,
     password: password,
-    avatar: avatar
+    avatar: avatar,
   };
 
   const editUser = await updateUser(userID, fields);
   res.send({
     message: 'user information updated',
-    editUser
+    editUser,
   });
 });
 
@@ -105,9 +105,9 @@ usersRouter.patch('/edit/:userID', async (req: Request, res: Response, next: Nex
 usersRouter.patch('/deleteuser', async (req: Request, res: Response, next: NextFunction) => {
   const editUser = await deleteUser();
   res.send({
-    message: 'user deactivated'
+    message: 'user deactivated',
   });
-})
+});
 
 // getuserbyusername
 usersRouter.get('/:username', async (req: Request, res: Response, next: NextFunction) => {
@@ -115,23 +115,23 @@ usersRouter.get('/:username', async (req: Request, res: Response, next: NextFunc
   const user = await getUserByUsername(username);
 
   if (!user) {
-    return res.status(400).json({ message: 'User does not exist' })
-  };
+    return res.status(400).json({ message: 'User does not exist' });
+  }
 
   // delete password
   delete user.password;
 
   res.send(user);
-})
+});
 
 // getuserbyid
-usersRouter.get('/id/:userID', async(req: Request, res: Response, next: NextFunction) => {
+usersRouter.get('/id/:userID', async (req: Request, res: Response, next: NextFunction) => {
   const userID = parseInt(req.params.userID);
   const user = await getUserById(userID);
 
   if (!user) {
-    return res.status(400).json({ message: 'User does not exist' })
-  };
+    return res.status(400).json({ message: 'User does not exist' });
+  }
 
   res.send(user);
 });

@@ -11,7 +11,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const { client } = require('../client');
 const bcrypt = require('bcrypt');
-;
 // create user
 const createUser = ({ username, password, avatar }) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -49,7 +48,7 @@ const getUser = ({ username, password }) => __awaiter(void 0, void 0, void 0, fu
 // get user by username
 const getUserByUsername = (username) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { rows: [user] } = yield client.query(`
+        const { rows: [user], } = yield client.query(`
     SELECT id, username, password, avatar FROM users 
     WHERE username = $1
     `, [username]);
@@ -62,7 +61,7 @@ const getUserByUsername = (username) => __awaiter(void 0, void 0, void 0, functi
 // get user by id
 const getUserById = (userID) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { rows: [user] } = yield client.query(`
+        const { rows: [user], } = yield client.query(`
     SELECT id, username, avatar FROM users
     WHERE id = $1
     `, [userID]);
@@ -94,8 +93,8 @@ const updateUser = (userID, fields) => __awaiter(void 0, void 0, void 0, functio
         fields.password = hashedPassword;
         const setString = Object.keys(fields)
             .map((key, index) => `"${key}"=$${index + 1}`)
-            .join(", ");
-        const { rows: [user] } = yield client.query(`
+            .join(', ');
+        const { rows: [user], } = yield client.query(`
     UPDATE users
     SET ${setString}
     WHERE id = ${userID}
@@ -107,7 +106,6 @@ const updateUser = (userID, fields) => __awaiter(void 0, void 0, void 0, functio
     catch (error) {
         console.error(error);
     }
-    ;
 });
 // delete/deactivate user
 const deleteUser = (userID) => __awaiter(void 0, void 0, void 0, function* () {
@@ -130,5 +128,5 @@ module.exports = {
     getUserById,
     getAllUsers,
     updateUser,
-    deleteUser
+    deleteUser,
 };

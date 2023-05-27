@@ -1,7 +1,7 @@
 // local server
 export const APIURL = 'http://localhost:3000/api';
 
-// login user 
+// login user
 export const fetchLogin = async (username: string, password: string) => {
   const res = await fetch(`${APIURL}/users/login`, {
     method: 'POST',
@@ -10,12 +10,12 @@ export const fetchLogin = async (username: string, password: string) => {
     },
     body: JSON.stringify({
       username: `${username}`,
-      password: `${password}`
+      password: `${password}`,
     }),
   });
   const json: object = await res.json();
   return json;
-}
+};
 
 // register user
 export const fetchRegister = async (username: string, password: string, avatar: string) => {
@@ -32,7 +32,7 @@ export const fetchRegister = async (username: string, password: string, avatar: 
   });
   const json: object = await res.json();
   return json;
-}
+};
 
 // fetch all users
 export const fetchUsers = async () => {
@@ -46,11 +46,11 @@ export const fetchUserByUsername = async (username: string) => {
   const res = await fetch(`${APIURL}/users/${username}`);
   const json: object = await res.json();
   return json;
-}
+};
 
 // fetch user by id
 export const fetchUserByUserID = async (userID: number) => {
   const res = await fetch(`${APIURL}/users/${userID}`);
   const json: object = await res.json();
   return json;
-}
+};

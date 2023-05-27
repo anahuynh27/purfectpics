@@ -14,9 +14,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const postsRouter = express_1.default.Router();
-;
-const { createPost, updatePost, getAllPosts, getAllActivePosts, getPostById, getPostByUserID } = require('../db/models/posts');
-const { getUserById, } = require('../db/models/users');
+const { createPost, updatePost, getAllPosts, getAllActivePosts, getPostById, getPostByUserID, } = require('../db/models/posts');
+const { getUserById } = require('../db/models/users');
 // import require user from utils
 const requireUser = require('./utils');
 // create post ~~ must be logged in to create a post ~~
@@ -27,11 +26,10 @@ postsRouter.post('/create', requireUser, (req, res, next) => __awaiter(void 0, v
     if (title.length < 1) {
         return res.status(400).json({ message: 'Title cannot be empty' });
     }
-    ;
     const post = yield createPost({ title, content, userID, photo });
     res.send({
         message: `Post created successfully! 🐾`,
-        post
+        post,
     });
 }));
 // edit post ~~ must be logged in to edit post ~~
@@ -43,24 +41,22 @@ postsRouter.patch('/edit/:postID', requireUser, (req, res, next) => __awaiter(vo
     if (title.length < 1) {
         return res.status(400).json({ message: 'Title cannot be empty' });
     }
-    ;
     // boolean to check if current user can edit post
     const authorizedUser = yield getUserById(userID);
     const post = yield getPostById(postID);
     if (authorizedUser.id != post.userID) {
         return res.status(400).json({ message: `You must be the owner of this post to edit` });
     }
-    ;
     const fields = {
         title,
         content,
         userID,
-        photo
+        photo,
     };
     const editPost = yield updatePost(postID, fields);
     res.send({
         message: `Post updated successfully! 🐾`,
-        editPost
+        editPost,
     });
 }));
 // all posts

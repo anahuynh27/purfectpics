@@ -1,15 +1,15 @@
-import { NextFunction } from "express";
+import { NextFunction } from 'express';
 
 // check if user is logged in
 function requireUser(req: any, res: any, next: NextFunction) {
   if (req.user) {
-    next()
+    next();
   } else {
     res.status(401);
     next({
-      message: 'You must be logged in to perform this action'
+      message: 'You must be logged in to perform this action',
     });
-  };
-};
+  }
+}
 
-module.exports = requireUser
+module.exports = requireUser;

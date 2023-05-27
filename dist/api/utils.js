@@ -8,10 +8,8 @@ function requireUser(req, res, next) {
     else {
         res.status(401);
         next({
-            message: 'You must be logged in to perform this action'
+            message: 'You must be logged in to perform this action',
         });
     }
-    ;
 }
-;
 module.exports = requireUser;
