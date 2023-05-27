@@ -70,13 +70,13 @@ postsRouter.patch('/edit/:postID', requireUser, async (req: any, res: Response, 
     photo
   };
 
-  const editPost = await updatePost(postID, fields);
+  const editPost: object = await updatePost(postID, fields);
 
   res.send({
     message: `Post updated successfully! 🐾`,
     editPost
-  })
-})
+  });
+});
 
 // all posts
 postsRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
