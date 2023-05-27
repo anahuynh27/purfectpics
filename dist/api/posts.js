@@ -16,13 +16,14 @@ const express_1 = __importDefault(require("express"));
 const postsRouter = express_1.default.Router();
 ;
 const { createPost, updatePost, getAllPosts, getAllActivePosts, getPostById, getPostByUserID } = require('../db/models/posts');
+const { getUserById, } = require('../db/models/users');
 // import require user from utils
 const requireUser = require('./utils');
 // create post ~~ must be logged in to create a post ~~
 postsRouter.post('/create', requireUser, (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { title, photo, content } = req.body;
     const userID = parseInt(req.user.id);
-    // validate title lenght
+    // validate title length
     if (title.length < 1) {
         return res.status(400).json({ message: 'Title cannot be empty' });
     }
@@ -33,21 +34,30 @@ postsRouter.post('/create', requireUser, (req, res, next) => __awaiter(void 0, v
         post
     });
 }));
-// edit post ~~ must b logged in to edit post ~~
+// edit post ~~ must be logged in to edit post ~~
 postsRouter.patch('/edit/:postID', requireUser, (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { title, photo, content } = req.body;
     const userID = parseInt(req.user.id);
     const postID = parseInt(req.params.postID);
-    // function or boolean to check if current user can edit post
-    console.log({ title, photo, content, userID, postID }, 'api');
+    // validate title length
+    if (title.length < 1) {
+        return res.status(400).json({ message: 'Title cannot be empty' });
+    }
+    ;
+    // boolean to check if current user can edit post
+    const authorizedUser = yield getUserById(userID);
+    const post = yield getPostById(postID);
+    if (authorizedUser.id != post.userID) {
+        return res.status(400).json({ message: `You must be the owner of this post to edit` });
+    }
+    ;
     const fields = {
         title,
         content,
         userID,
         photo
     };
-    console.log({ fields }, 'api');
-    const editPost = yield updatePost(postID, userID, fields);
+    const editPost = yield updatePost(postID, fields);
     res.send({
         message: `Post updated successfully! 🐾`,
         editPost

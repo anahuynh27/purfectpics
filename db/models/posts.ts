@@ -7,7 +7,8 @@ interface Posts {
     userID: number, 
     isActive: boolean, 
     photo: string
-}
+};
+
 const createPost = async ({title, content, userID, photo}: Posts) => {
     try {
         const { rows: [post] } = await client.query(`
@@ -27,7 +28,7 @@ const getAllActivePosts = async () => {
     try {
         const { rows: posts } = await client.query(`
         SELECT * FROM posts
-        WHERE "isactive" = 'true';
+        WHERE "isactive" = 'true'
         `);
 
         return posts;
@@ -50,16 +51,12 @@ const getAllPosts = async () => {
 };
 
 //updatePost
-const updatePost = async (postID: number, userID: number, fields: Posts) => {
+const updatePost = async (postID: number, fields: Posts) => {
     try {
-
-        console.log({postID, userID, fields}, 'models')
-
         const setString = Object.keys(fields)
         .map((key, index) => `"${key}"=$${index + 1}`)
         .join(", ");
 
-        console.log({setString}, 'models')
         
         const { rows: [posts] } = await client.query(`
         UPDATE posts
@@ -75,12 +72,12 @@ const updatePost = async (postID: number, userID: number, fields: Posts) => {
 };
 
 //getPostById
-const getPostById = async ({ id }: Posts) => {
+const getPostById = async ( postID: number ) => {
     try {
         const { rows: [post] } = await client.query(`
         SELECT * FROM posts
         WHERE id = $1
-        `, [id]);
+        `, [postID]);
 
         return post;
     } catch (error) {

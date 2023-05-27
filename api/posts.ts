@@ -20,6 +20,10 @@ const {
   getPostByUserID
 } = require('../db/models/posts');
 
+const {
+  getUserById,
+} = require('../db/models/users')
+
 // import require user from utils
 const requireUser = require('./utils');
 
@@ -28,9 +32,9 @@ postsRouter.post('/create', requireUser, async (req: any, res: Response, next: N
   const { title, photo, content }: Post = req.body;
   const userID: number = parseInt(req.user.id);
 
-  // validate title lenght
+  // validate title length
   if (title.length < 1) {
-    return res.status(400).json({ message: 'Title cannot be empty' })
+    return res.status(400).json({ message: 'Title cannot be empty' });
   };
 
   const post: object = await createPost({ title, content, userID, photo });
@@ -41,25 +45,32 @@ postsRouter.post('/create', requireUser, async (req: any, res: Response, next: N
   });
 });
 
-// edit post ~~ must b logged in to edit post ~~
+// edit post ~~ must be logged in to edit post ~~
 postsRouter.patch('/edit/:postID', requireUser, async (req: any, res: Response, next: NextFunction) => {
   const { title, photo, content }: Post = req.body;
   const userID: number = parseInt(req.user.id);
-  const postID: number = parseInt(req.params.postID)
+  const postID: number = parseInt(req.params.postID);
 
-  // function or boolean to check if current user can edit post
+  // validate title length
+  if (title.length < 1) {
+    return res.status(400).json({ message: 'Title cannot be empty' });
+  };
 
-  console.log({title, photo, content, userID, postID}, 'api')
+  // boolean to check if current user can edit post
+  const authorizedUser = await getUserById(userID);
+  const post = await getPostById(postID);
+  if (authorizedUser.id != post.userID) {
+    return res.status(400).json({ message: `You must be the owner of this post to edit` });
+  };
 
   const fields = {
     title,
     content,
     userID,
     photo
-  }
+  };
 
-  console.log({fields}, 'api')
-  const editPost = await updatePost(postID, userID, fields)
+  const editPost = await updatePost(postID, fields);
 
   res.send({
     message: `Post updated successfully! 🐾`,

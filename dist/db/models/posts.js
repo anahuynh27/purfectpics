@@ -10,6 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const { client } = require('../client');
+;
 const createPost = ({ title, content, userID, photo }) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { rows: [post] } = yield client.query(`
@@ -29,7 +30,7 @@ const getAllActivePosts = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { rows: posts } = yield client.query(`
         SELECT * FROM posts
-        WHERE "isactive" = 'true';
+        WHERE "isactive" = 'true'
         `);
         return posts;
     }
@@ -52,13 +53,11 @@ const getAllPosts = () => __awaiter(void 0, void 0, void 0, function* () {
     ;
 });
 //updatePost
-const updatePost = (postID, userID, fields) => __awaiter(void 0, void 0, void 0, function* () {
+const updatePost = (postID, fields) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        console.log({ postID, userID, fields }, 'models');
         const setString = Object.keys(fields)
             .map((key, index) => `"${key}"=$${index + 1}`)
             .join(", ");
-        console.log({ setString }, 'models');
         const { rows: [posts] } = yield client.query(`
         UPDATE posts
         SET ${setString}
@@ -73,12 +72,12 @@ const updatePost = (postID, userID, fields) => __awaiter(void 0, void 0, void 0,
     ;
 });
 //getPostById
-const getPostById = ({ id }) => __awaiter(void 0, void 0, void 0, function* () {
+const getPostById = (postID) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { rows: [post] } = yield client.query(`
         SELECT * FROM posts
         WHERE id = $1
-        `, [id]);
+        `, [postID]);
         return post;
     }
     catch (error) {
