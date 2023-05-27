@@ -79,35 +79,43 @@ usersRouter.post('/register', async (req: Request, res: Response, next: NextFunc
 });
 
 // updateuser
-usersRouter.patch('/edit/:userID', async (req: Request, res: Response, next: NextFunction) => {
-  const { username, password, avatar }: User = req.body;
-  const userID = parseInt(req.params.userID);
+usersRouter.patch(
+  '/edit/:userID',
+  requireUser,
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { username, password, avatar }: User = req.body;
+    const userID = parseInt(req.params.userID);
 
-  // validate password lenght
-  if (password.length < 8) {
-    return res.status(400).json({ message: 'Password must be at least 8 characters long...' });
+    // validate password lenght
+    if (password.length < 8) {
+      return res.status(400).json({ message: 'Password must be at least 8 characters long...' });
+    }
+
+    const fields = {
+      username: username,
+      password: password,
+      avatar: avatar,
+    };
+
+    const editUser = await updateUser(userID, fields);
+    res.send({
+      message: 'user information updated',
+      editUser,
+    });
   }
-
-  const fields = {
-    username: username,
-    password: password,
-    avatar: avatar,
-  };
-
-  const editUser = await updateUser(userID, fields);
-  res.send({
-    message: 'user information updated',
-    editUser,
-  });
-});
+);
 
 // deactivateuser
-usersRouter.patch('/deleteuser', async (req: Request, res: Response, next: NextFunction) => {
-  const editUser = await deleteUser();
-  res.send({
-    message: 'user deactivated',
-  });
-});
+usersRouter.patch(
+  '/deleteuser',
+  requireUser,
+  async (req: Request, res: Response, next: NextFunction) => {
+    const editUser = await deleteUser();
+    res.send({
+      message: 'user deactivated',
+    });
+  }
+);
 
 // getuserbyusername
 usersRouter.get('/:username', async (req: Request, res: Response, next: NextFunction) => {
