@@ -50,8 +50,11 @@ const getAllPosts = async () => {
 };
 
 //updatePost
-const updatePost = async ({id}:Posts, ...fields: []) => {
+const updatePost = async (postID: number, ...fields: []) => {
     try {
+
+        console.log({postID, fields}, 'models')
+
         const setString = Object.keys(fields)
         .map((key, index) => `"${key}=$${index + 1}`)
         .join(", ");
@@ -59,7 +62,7 @@ const updatePost = async ({id}:Posts, ...fields: []) => {
         const { rows: [posts] } = await client.query(`
         UPDATE posts
         SET ${setString}
-        WHERE id=${id}
+        WHERE id=${postID}
         RETURNING *
         `, Object.values(fields));
 

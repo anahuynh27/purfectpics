@@ -15,7 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const postsRouter = express_1.default.Router();
 ;
-const { createPost, getAllPosts, getAllActivePosts, getPostById, getPostByUserID } = require('../db/models/posts');
+const { createPost, updatePost, getAllPosts, getAllActivePosts, getPostById, getPostByUserID } = require('../db/models/posts');
 // import require user from utils
 const requireUser = require('./utils');
 // create post ~~ must be logged in to create a post ~~
@@ -31,6 +31,19 @@ postsRouter.post('/create', requireUser, (req, res, next) => __awaiter(void 0, v
     res.send({
         message: `Post created successfully! 🐾`,
         post
+    });
+}));
+// edit post ~~ must b logged in to edit post ~~
+postsRouter.patch('/edit/:postID', requireUser, (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const { title, photo, content } = req.body;
+    const userID = parseInt(req.user.id);
+    const postID = parseInt(req.params.postID);
+    // function or boolean to check if current user can edit post
+    console.log({ title, photo, content, userID, postID }, 'api');
+    const editPost = yield updatePost(postID, { title, photo, content });
+    res.send({
+        message: `Post updated successfully! 🐾`,
+        editPost
     });
 }));
 // all posts

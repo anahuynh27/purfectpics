@@ -13,6 +13,7 @@ interface Post {
 
 const {
   createPost,
+  updatePost,
   getAllPosts,
   getAllActivePosts,
   getPostById,
@@ -39,6 +40,24 @@ postsRouter.post('/create', requireUser, async (req: any, res: Response, next: N
     post
   });
 });
+
+// edit post ~~ must b logged in to edit post ~~
+postsRouter.patch('/edit/:postID', requireUser, async (req: any, res: Response, next: NextFunction) => {
+  const { title, photo, content }: Post = req.body;
+  const userID: number = parseInt(req.user.id);
+  const postID: number = parseInt(req.params.postID)
+
+  // function or boolean to check if current user can edit post
+
+  console.log({title, photo, content, userID, postID}, 'api')
+
+  const editPost = await updatePost(postID, { title, photo, content })
+
+  res.send({
+    message: `Post updated successfully! 🐾`,
+    editPost
+  })
+})
 
 // all posts
 postsRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
