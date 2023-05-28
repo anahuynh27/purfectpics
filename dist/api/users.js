@@ -63,7 +63,7 @@ usersRouter.post('/register', (req, res, next) => __awaiter(void 0, void 0, void
     });
 }));
 // updateuser
-usersRouter.patch('/edit/:userID', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+usersRouter.patch('/edit/:userID', requireUser, (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { username, password, avatar } = req.body;
     const userID = parseInt(req.params.userID);
     // validate password lenght
@@ -82,7 +82,7 @@ usersRouter.patch('/edit/:userID', (req, res, next) => __awaiter(void 0, void 0,
     });
 }));
 // deactivateuser
-usersRouter.patch('/deleteuser', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+usersRouter.patch('/deleteuser', requireUser, (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const editUser = yield deleteUser();
     res.send({
         message: 'user deactivated',
