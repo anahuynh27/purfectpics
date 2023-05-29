@@ -54,3 +54,17 @@ export const fetchUserByUserID = async (userID: number) => {
   const json: object = await res.json();
   return json;
 };
+
+// fetch all posts
+export const fetchAllPosts = async () => {
+  const res = await fetch(`${APIURL}/posts/`);
+  const json: object = await res.json();
+  return json;
+};
+
+// fetch all active posts
+export const fetchAllActivePosts = async () => {
+  const res = await fetch(`${APIURL}/posts/active`);
+  const json: object = await res.json();
+  return json;
+};

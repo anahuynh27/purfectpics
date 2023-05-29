@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.fetchUserByUserID = exports.fetchUserByUsername = exports.fetchUsers = exports.fetchRegister = exports.fetchLogin = exports.APIURL = void 0;
+exports.fetchAllActivePosts = exports.fetchAllPosts = exports.fetchUserByUserID = exports.fetchUserByUsername = exports.fetchUsers = exports.fetchRegister = exports.fetchLogin = exports.APIURL = void 0;
 // local server
 exports.APIURL = 'http://localhost:3000/api';
 // login user
@@ -66,3 +66,17 @@ const fetchUserByUserID = (userID) => __awaiter(void 0, void 0, void 0, function
     return json;
 });
 exports.fetchUserByUserID = fetchUserByUserID;
+// fetch all posts
+const fetchAllPosts = () => __awaiter(void 0, void 0, void 0, function* () {
+    const res = yield fetch(`${exports.APIURL}/posts/`);
+    const json = yield res.json();
+    return json;
+});
+exports.fetchAllPosts = fetchAllPosts;
+// fetch all active posts
+const fetchAllActivePosts = () => __awaiter(void 0, void 0, void 0, function* () {
+    const res = yield fetch(`${exports.APIURL}/posts/active`);
+    const json = yield res.json();
+    return json;
+});
+exports.fetchAllActivePosts = fetchAllActivePosts;
