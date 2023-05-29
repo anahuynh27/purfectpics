@@ -75,6 +75,7 @@ postsRouter.get('/:postID', (req, res, next) => __awaiter(void 0, void 0, void 0
     const post = yield getPostById({ id });
     res.send(post);
 }));
+// get posts by user id
 postsRouter.get('/user/:userID', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const userID = parseInt(req.params.userID);
     const post = yield getPostByUserID({ userID });

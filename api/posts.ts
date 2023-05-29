@@ -99,6 +99,7 @@ postsRouter.get('/:postID', async (req: Request, res: Response, next: NextFuncti
   res.send(post);
 });
 
+// get posts by user id
 postsRouter.get('/user/:userID', async (req: Request, res: Response, next: NextFunction) => {
   const userID = parseInt(req.params.userID);
   const post: object = await getPostByUserID({ userID });

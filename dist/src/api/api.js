@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.fetchAllActivePosts = exports.fetchAllPosts = exports.fetchUserByUserID = exports.fetchUserByUsername = exports.fetchUsers = exports.fetchRegister = exports.fetchLogin = exports.APIURL = void 0;
+exports.fetchPostsByUserID = exports.fetchPostById = exports.fetchAllActivePosts = exports.fetchAllPosts = exports.fetchEditPost = exports.fetchCreatePosts = exports.fetchUserByUserID = exports.fetchUserByUsername = exports.fetchUsers = exports.fetchRegister = exports.fetchLogin = exports.APIURL = void 0;
 // local server
 exports.APIURL = 'http://localhost:3000/api';
 // login user
@@ -66,6 +66,42 @@ const fetchUserByUserID = (userID) => __awaiter(void 0, void 0, void 0, function
     return json;
 });
 exports.fetchUserByUserID = fetchUserByUserID;
+// fetch create post
+const fetchCreatePosts = (title, photo, content, token) => __awaiter(void 0, void 0, void 0, function* () {
+    const res = yield fetch(`${exports.APIURL}/posts/create`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+            title: `${title}`,
+            photo: `${photo}`,
+            content: `${content}`,
+        }),
+    });
+    const json = yield res.json();
+    return json;
+});
+exports.fetchCreatePosts = fetchCreatePosts;
+// fetch edit post
+const fetchEditPost = (postID, title, photo, content, token) => __awaiter(void 0, void 0, void 0, function* () {
+    const res = yield fetch(`${exports.APIURL}/posts/edit/${postID}`, {
+        method: 'PATCH',
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+            title: `${title}`,
+            photo: `${photo}`,
+            content: `${content}`,
+        }),
+    });
+    const json = res.json();
+    return json;
+});
+exports.fetchEditPost = fetchEditPost;
 // fetch all posts
 const fetchAllPosts = () => __awaiter(void 0, void 0, void 0, function* () {
     const res = yield fetch(`${exports.APIURL}/posts/`);
@@ -80,3 +116,17 @@ const fetchAllActivePosts = () => __awaiter(void 0, void 0, void 0, function* ()
     return json;
 });
 exports.fetchAllActivePosts = fetchAllActivePosts;
+// fetch post by id
+const fetchPostById = (postID) => __awaiter(void 0, void 0, void 0, function* () {
+    const res = yield fetch(`${exports.APIURL}/posts/${postID}`);
+    const json = yield res.json();
+    return json;
+});
+exports.fetchPostById = fetchPostById;
+// fetch posts by user id
+const fetchPostsByUserID = (userID) => __awaiter(void 0, void 0, void 0, function* () {
+    const res = yield fetch(`${exports.APIURL}/posts/users/${userID}`);
+    const json = yield res.json();
+    return json;
+});
+exports.fetchPostsByUserID = fetchPostsByUserID;
